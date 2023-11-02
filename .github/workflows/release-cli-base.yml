@@ -6,7 +6,7 @@ on:
     tags:
       - '**'
 jobs:
-  build-cli:
+  build-cli-base:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
