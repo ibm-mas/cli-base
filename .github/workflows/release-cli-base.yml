@@ -22,8 +22,9 @@ jobs:
       # -------------------------------------------------------------------------------------------
       - name: Build the docker image
         run: |
+          python3 -m pip install docker-squash
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base
-          docker tag ibmmas/cli-base quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }} ibmmas/cli-base
           docker tag ibmmas/cli-base quay.io/ibmmas/cli-base:latest
 
       # https://github.com/marketplace/actions/push-to-registry
