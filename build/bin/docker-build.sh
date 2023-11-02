@@ -35,10 +35,6 @@ do
     shift
 done
 
-# Enable experimental features so we can use docker --squash
-cat /etc/docker/daemon.json | jq '. += {"experimental":true}' | sudo tee /etc/docker/daemon.json
-sudo systemctl restart docker.service
-
 BUILDPATH="${BUILDPATH:-image/$IMAGE}"
 DOCKERFILE="${DOCKERFILE:-$BUILDPATH/Dockerfile}"
 
@@ -58,5 +54,4 @@ docker build \
   --build-arg RELEASE_LABEL=$GITHUB_RUN_ID \
   --build-arg VCS_REF=$GITHUB_SHA \
   --build-arg VCS_URL=https://github.com/$GITHUB_REPOSITORY \
-  --squash \
   -t $NAMESPACE/$IMAGE $EXTRA_PARAMS -f $DOCKERFILE $BUILDPATH
