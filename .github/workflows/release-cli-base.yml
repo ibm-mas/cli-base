@@ -1,0 +1,36 @@
+name: Release CLI Base
+on:
+  push:
+    branches-ignore:
+      - '**'
+    tags:
+      - '**'
+jobs:
+  build-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
+      # 3. CLI container image
+      # -------------------------------------------------------------------------------------------
+      - name: Build the docker image
+        run: |
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base
+          docker tag ibmmas/cli-base quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}
+          docker tag ibmmas/cli-base quay.io/ibmmas/cli-base:latest
+
+      # https://github.com/marketplace/actions/push-to-registry
+      - name: Push the docker image
+        id: push_to_quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          tags: quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }} quay.io/ibmmas/cli-base:latest
+          username: ${{ secrets.QUAYIO_USERNAME }}
+          password: ${{ secrets.QUAYIO_PASSWORD }}
