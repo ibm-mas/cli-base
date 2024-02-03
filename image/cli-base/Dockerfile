@@ -22,6 +22,7 @@ USER root
 RUN umask 0002 && \
     bash /tmp/install/install-oc.sh && \
     bash /tmp/install/install-ibmpak.sh && \
+    bash /tmp/install/install-cpdcli.sh && \
     bash /tmp/install/install-ibmcloud.sh && \
     bash /tmp/install/install-skopeo.sh && \
     bash /tmp/install/install-aws.sh && \
