@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/python-39
+FROM registry.access.redhat.com/ubi9/python-311
 ARG VERSION_LABEL
 # ----- Start as "default" user ----------------------------------------------
 # Running as userId = default
