@@ -18,3 +18,4 @@ Provides:
 - `jq`
 - `yq` v4.35.1
 - `tini` v0.19.0
+- `rclone`
