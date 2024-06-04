@@ -9,3 +9,5 @@ click==8.1.7
 prettytable==3.9.0
 slackclient==1.3.2
 jira==3.5.2
+boto3==1.34.117
+ibm-watson-machine-learning==1.0.357
