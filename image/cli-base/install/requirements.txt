@@ -10,4 +10,3 @@ prettytable==3.9.0
 slackclient==1.3.2
 jira==3.5.2
 boto3
-ibm-watson-machine-learning
