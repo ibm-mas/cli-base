@@ -30,6 +30,7 @@ RUN umask 0002 && \
     bash /tmp/install/install-yq.sh && \
     bash /tmp/install/install-argocd.sh && \
     bash /tmp/install/install-rosa.sh && \
+    bash /tmp/install/install-rclone.sh && \
     rm -rf /tmp/install && \
     rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
 
