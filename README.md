@@ -4,7 +4,7 @@ This base container image allows us to build the CLI faster by seperating the bu
 Provides:
 
 - `python3` v3.9
-- `ibmcloud` v2.12.1
+- `ibmcloud` v2.26.1
 - `aws`
 - `helm` v3
 - `cloudctl` v3.17.0
