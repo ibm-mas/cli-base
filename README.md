@@ -8,8 +8,8 @@ Provides:
 - `aws`
 - `helm` v3
 - `cloudctl` v3.17.0
-- `mongosh` v1.10.5
-- `mongodump` v100.8.0
+- `mongosh` v2.2.9
+- `mongodump` v100.9.5
 - `oc`
 - `oc mirror`
 - `oc ibm-pak` v1.3.1
@@ -19,3 +19,5 @@ Provides:
 - `yq` v4.35.1
 - `tini` v0.19.0
 - `rclone`
+- `rosa`
+- `argocd`
