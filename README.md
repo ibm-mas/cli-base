@@ -19,5 +19,4 @@ Provides:
 - `yq` v4.35.1
 - `tini` v0.19.0
 - `rclone`
-- `ibm-watson-machine-learning`
 - `boto3`
