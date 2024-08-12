@@ -60,7 +60,7 @@ echo "VERSION_LABEL .. $DOCKER_TAG"
 echo "RELEASE_LABEL .. $GITHUB_RUN_ID"
 echo "VCS_REF ........ $GITHUB_SHA"
 echo "VCS_URL ........ https://github.com/$GITHUB_REPOSITORY"
-
+echo $TARGET_PLATFORM
 if [[ "$TARGET_PLATFORM" != "" ]] && [[ "$TARGET_PLATFORM" != "amd64" ]]; then
   install_buildx
 fi
