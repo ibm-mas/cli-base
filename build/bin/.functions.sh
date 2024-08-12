@@ -58,9 +58,9 @@ function install_yq() {
 # - https://medium.com/@artur.klauser/building-multi-architecture-docker-images-with-buildx-27d80f7e2408
 # - https://stackoverflow.com/questions/65365797/docker-buildx-exec-user-process-caused-exec-format-error
 function install_buildx() {
-  docker buildx use mybuilder &> /dev/null
+ # docker buildx use mybuilder &> /dev/null
   echo "install_buildx"
-  if [ "$?" != "0" ]; then
+ # if [ "$?" != "0" ]; then
      echo "inside0 install_buildx"
     mkdir -vp ~/.docker/cli-plugins/
     #https://download.docker.com/linux/rhel/8/x86_64/stable/Packages/docker-buildx-plugin-0.16.1-1.el8.x86_64.rpm
@@ -76,7 +76,7 @@ echo "inside3 install_buildx"
 
     docker buildx create --name mybuilder
     docker buildx use mybuilder
-  fi
+#  fi
   docker version || exit 1
   docker buildx version || exit 1
   docker buildx inspect --bootstrap || exit 1
