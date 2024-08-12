@@ -30,7 +30,7 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]
   chmod  g=u /usr/local/bin/helm
   chmod 777 /usr/local/bin/helm
 else
-  wget https://get.helm.sh/helm-v3.15.3-linux-s390x.tar.gz
+   curl -L https://get.helm.sh/helm-v3.15.3-linux-s390x.tar.gz -o helm-v3.15.3-linux-s390x.tar.gz
   tar -xvzf helm-v3.15.3-linux-s390x.tar.gz
   cd linux-s390x
   mv helm /usr/local/bin/
