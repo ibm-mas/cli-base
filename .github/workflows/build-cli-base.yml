@@ -28,8 +28,8 @@ jobs:
       - name: Build the docker image
         run: |
           python3 -m pip install docker-squash
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }} ibmmas/cli-base
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }} ibmmas/cli-base:${{ env.DOCKER_TAG }}
 
       - name: Push the docker image
         id: push_to_quay
