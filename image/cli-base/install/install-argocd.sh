@@ -22,7 +22,6 @@ done
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
-curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-${TARGET_PLATFORM} && \
-# argocd-linux-s390x
-    install -m 555 argocd-linux-amd64 /usr/local/bin/argocd && \
+curl -sSL -o argocd-linux-${TARGET_PLATFORM} https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-${TARGET_PLATFORM} && \
+    install -m 555 argocd-linux-${TARGET_PLATFORM} /usr/local/bin/argocd && \
     rm argocd-linux-${TARGET_PLATFORM}
