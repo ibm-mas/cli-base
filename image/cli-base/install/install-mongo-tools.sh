@@ -43,7 +43,6 @@ fi
   tar xvfz mongodb-database-tools-rhel*.tgz
   mv mongodb-database-tools-rhel*/bin/* /usr/local/bin/
   rm -rf mongodb-database-tools-rhel*
-  rm mongodb-database-tools-rhel*.tgz
 mongodump --version
 #mongodump version: 100.9.5
  #git version: 90481484c1783826fe26ca18bbdcd30e933f3b88
