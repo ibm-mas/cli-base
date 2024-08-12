@@ -23,7 +23,7 @@ done
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
-if [[ "$TARGET_PLATFORM" == "amd64" ]]
+if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   curl "https://downloads.mongodb.com/compass/mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm" -o mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm
   rpm -i mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm
   rm mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm
@@ -35,7 +35,7 @@ fi
 mongosh --version
 
 # Install Mongo Tools
-if [[ "$TARGET_PLATFORM" == "amd64" ]]
+if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel90-x86_64-100.9.5.tgz" -o mongodb-database-tools-rhel90-x86_64-100.9.5.tgz
 else
   curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel83-s390x-100.9.5.tgz" -o mongodb-database-tools-rhel83-s390x-100.9.5.tgz

@@ -22,7 +22,8 @@ done
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
-if [[ "$TARGET_PLATFORM" == "amd64" ]]
+if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
+
   curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
   chmod 700 get_helm.sh
   ./get_helm.sh
