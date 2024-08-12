@@ -27,7 +27,7 @@ RUN umask 0002 && \
     bash /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-aws.sh && \
-    bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE && \
