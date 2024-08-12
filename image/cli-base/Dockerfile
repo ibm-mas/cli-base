@@ -37,7 +37,7 @@ RUN umask 0002 && \
     rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
 
 # 4. Install tini
-ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /tini
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-$ARCHITECTURE /tini
 RUN chmod +x /tini
 
 # 11. Setup working environment
