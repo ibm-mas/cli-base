@@ -63,9 +63,10 @@ function install_buildx() {
   if [ "$?" != "0" ]; then
      echo "inside0 install_buildx"
     mkdir -vp ~/.docker/cli-plugins/
+    #https://download.docker.com/linux/rhel/8/x86_64/stable/Packages/docker-buildx-plugin-0.16.1-1.el8.x86_64.rpm
     curl --silent -L "https://github.com/docker/buildx/releases/download/v0.11.2/buildx-v0.11.2.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
     chmod a+x ~/.docker/cli-plugins/docker-buildx
-    echo "inside1 install_buildx"
+    echo "inside 1 install_buildx"
     sudo apt-get install -y qemu-user-static
       echo "inside2 install_buildx"
     qemu-aarch64-static --version
