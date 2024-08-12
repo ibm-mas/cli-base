@@ -50,7 +50,33 @@ function install_yq() {
   python -m pip install yq || exit 1
 }
 
+# Install buildx
+# -----------------------------------------------------------------------------
+# Useful links:
+# - https://docs.docker.com/engine/reference/commandline/buildx_build/#output
+# - https://docs.docker.com/build/building/multi-platform/
+# - https://medium.com/@artur.klauser/building-multi-architecture-docker-images-with-buildx-27d80f7e2408
+# - https://stackoverflow.com/questions/65365797/docker-buildx-exec-user-process-caused-exec-format-error
+function install_buildx() {
+  docker buildx use mybuilder &> /dev/null
+  if [ "$?" != "0" ]; then
+    mkdir -vp ~/.docker/cli-plugins/
+    curl --silent -L "https://github.com/docker/buildx/releases/download/v0.11.2/buildx-v0.11.2.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+    chmod a+x ~/.docker/cli-plugins/docker-buildx
 
+    sudo apt-get install -y qemu-user-static
+    qemu-aarch64-static --version
+
+    sudo apt-get install -y binfmt-support
+    update-binfmts --version
+
+    docker buildx create --name mybuilder
+    docker buildx use mybuilder
+  fi
+  docker version || exit 1
+  docker buildx version || exit 1
+  docker buildx inspect --bootstrap || exit 1
+}
 # These should be loaded already, but just incase!
 # ------------------------------------------------
 if [[ -z "$BUILD_SYSTEM_ENV_LOADED" ]]; then

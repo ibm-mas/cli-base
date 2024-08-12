@@ -1,5 +1,6 @@
 FROM registry.access.redhat.com/ubi9/python-39
 ARG VERSION_LABEL
+ARG ARCHITECTURE
 # ----- Start as "default" user ----------------------------------------------
 # Running as userId = default
 # HOME=/opt/app-root
@@ -20,17 +21,17 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
 # 3. Install required tools & Ansible collections
 USER root
 RUN umask 0002 && \
-    bash /tmp/install/install-oc.sh && \
-    bash /tmp/install/install-ibmpak.sh && \
-    bash /tmp/install/install-ibmcloud.sh && \
-    bash /tmp/install/install-skopeo.sh && \
-    bash /tmp/install/install-aws.sh && \
-    bash /tmp/install/install-helm.sh && \
-    bash /tmp/install/install-mongo-tools.sh && \
-    bash /tmp/install/install-yq.sh && \
-    bash /tmp/install/install-argocd.sh && \
-    bash /tmp/install/install-rosa.sh && \
-    bash /tmp/install/install-rclone.sh && \
+    bash /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
+    bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
+    bash /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
+    bash /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-aws.sh && \
+    bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
+    bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
+    bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
+    bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-rosa.sh && \
+    #bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE && \
     rm -rf /tmp/install && \
     rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
 

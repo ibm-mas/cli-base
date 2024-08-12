@@ -2,6 +2,27 @@
 
 # Install ArgoCD CLI
 set -e
-curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && \
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+     --target-platform)
+    TARGET_PLATFORM="$2"
+    ;;
+        *)
+        # unknown option, use as additional params directly to docker
+        EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
+        ;;
+    esac
+    shift
+    shift
+done
+#fallback to amd64 if architecture not defined
+if [[ "$TARGET_PLATFORM" == "" ]]
+  then TARGET_PLATFORM=amd64
+fi
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-${TARGET_PLATFORM} && \
+# argocd-linux-s390x
     install -m 555 argocd-linux-amd64 /usr/local/bin/argocd && \
-    rm argocd-linux-amd64
+    rm argocd-linux-${TARGET_PLATFORM}
