@@ -6,7 +6,38 @@ on:
     tags-ignore:
       - '**'
 jobs:
-  build-cli-base:
+  build-cli-base-amd64:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Setup
+      # -------------------------------------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v3
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
+      # 2. Build and Publish CLI base container image
+      # -------------------------------------------------------------------------------------------
+      - name: Build the docker image
+        run: |
+          python3 -m pip install docker-squash
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:amd64 ibmmas/cli-base:amd64
+
+      - name: Push the docker image
+        id: push_to_quay
+        run: |
+          docker images
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+          docker push quay.io/ibmmas/cli-base:amd64
+  build-cli-base-s390x:
     runs-on: ubuntu-latest
     steps:
       # 1. Setup
@@ -37,3 +68,4 @@ jobs:
           docker images
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
           docker push quay.io/ibmmas/cli-base:s390x
+

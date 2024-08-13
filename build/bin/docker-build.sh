@@ -41,7 +41,7 @@ done
 
 BUILDPATH="${BUILDPATH:-image/$IMAGE}"
 DOCKERFILE="${DOCKERFILE:-$BUILDPATH/Dockerfile.$TARGET_PLATFORM}"
-TARGET_PLATFORM=s390x
+
 # Fallback to $BUILDPATH/Dockerfile if $DOCKERFILE does not exist
 if [ ! -e $DOCKERFILE ]; then
   DOCKERFILE="$BUILDPATH/Dockerfile"

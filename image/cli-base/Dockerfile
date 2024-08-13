@@ -1,6 +1,6 @@
     FROM registry.access.redhat.com/ubi9/python-39
 ARG VERSION_LABEL
-ARG ARCHITECTURE=s390x
+ARG ARCHITECTURE
 # ----- Start as "default" user ----------------------------------------------
 # Running as userId = default
 # HOME=/opt/app-root
