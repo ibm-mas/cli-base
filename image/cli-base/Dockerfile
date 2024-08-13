@@ -16,7 +16,7 @@ RUN dnf update -y --skip-broken --nobest &&\
 USER default
 COPY --chown=default:root install /tmp/install
 RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
-    python3 -m pip install ./cryptography-42.0.8-cp311-cp311-linux_s390x.whl &&\
+     pip3 install /tmp/install/cryptography-42.0.8-cp311-cp311-linux_s390x.whl &&\
    python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
 
 # 3. Install required tools & Ansible collections
