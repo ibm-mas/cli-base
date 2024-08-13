@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-39
+    FROM registry.access.redhat.com/ubi9/python-39
 ARG VERSION_LABEL
 ARG ARCHITECTURE=s390x
 # ----- Start as "default" user ----------------------------------------------
@@ -16,9 +16,8 @@ RUN dnf update -y --skip-broken --nobest &&\
 USER default
 COPY --chown=default:root install /tmp/install
 RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
-     pip3 install /tmp/install/cryptography-42.0.8-cp311-cp311-linux_s390x.whl &&\
-   python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
-
+   #python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
+    pip3 install --upgrade -r /tmp/install/requirements.txt --find-links /tmp/install
 # 3. Install required tools & Ansible collections
 USER root
 RUN echo $ARCHITECTURE
