@@ -26,14 +26,18 @@ RUN umask 0002 && \
     bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
-    #bash /tmp/install/install-aws.sh && \
+
     bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE && \
-    #bash /tmp/install/install-rosa.sh && \
-    #bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE && \
-    rm -rf /tmp/install && \
+    bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
+
+RUN if [ "$ARCHITECTURE" = "amd64" ]; then \
+    bash /tmp/install/install-aws.sh && \
+    bash /tmp/install/install-rosa.sh && \
+    bash /tmp/install/install-rclone.sh  && \
+    fi
+RUN rm -rf /tmp/install && \
     rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
 
 # 4. Install tini
