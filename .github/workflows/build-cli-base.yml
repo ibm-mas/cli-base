@@ -29,14 +29,14 @@ jobs:
         run: |
           python3 -m pip install docker-squash
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:amd64 ibmmas/cli-base:amd64
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base
 
       - name: Push the docker image
         id: push_to_quay
         run: |
           docker images
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          docker push quay.io/ibmmas/cli-base:amd64
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
   build-cli-base-s390x:
     runs-on: ubuntu-latest
     steps:
@@ -60,12 +60,11 @@ jobs:
         run: |
           python3 -m pip install docker-squash
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:s390x ibmmas/cli-base:s390x
-
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base
       - name: Push the docker image
         id: push_to_quay
         run: |
           docker images
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          docker push quay.io/ibmmas/cli-base:s390x
-
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
+         
