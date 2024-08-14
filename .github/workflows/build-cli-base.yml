@@ -67,4 +67,3 @@ jobs:
           docker images
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
-         
