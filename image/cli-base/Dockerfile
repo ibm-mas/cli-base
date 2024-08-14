@@ -32,8 +32,11 @@ RUN umask 0002 && \
     bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
 
-RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then bash /tmp/install/install-aws.sh  bash /tmp/install/install-rosa.sh  bash /tmp/install/install-rclone.sh  fi
-
+RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then \
+         bash /tmp/install/install-aws.sh; \
+         bash /tmp/install/install-rosa.sh; \
+         bash /tmp/install/install-rclone.sh; \
+     fi
 
 RUN rm -rf /tmp/install && \
     rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
