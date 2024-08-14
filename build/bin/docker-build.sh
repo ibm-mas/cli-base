@@ -66,8 +66,8 @@ if [[ "$TARGET_PLATFORM" != "" ]] && [[ "$TARGET_PLATFORM" != "amd64" ]]; then
 fi
 if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   if [[ "$TARGET_PLATFORM" == "amd64" ]]
-  then LOCAL_TAG=$NAMESPACE/$IMAGE:$TARGET_PLATFORM
-  else LOCAL_TAG=$NAMESPACE/$IMAGE
+   then LOCAL_TAG=$NAMESPACE/$IMAGE:$VERSION_LABEL-$TARGET_PLATFORM
+  else LOCAL_TAG=$NAMESPACE/$IMAGE:$VERSION_LABEL
   fi
 docker build \
   --build-arg ARCHITECTURE=amd64 \
@@ -77,7 +77,7 @@ docker build \
   --build-arg VCS_URL=https://github.com/$GITHUB_REPOSITORY \
    -t $LOCAL_TAG $EXTRA_PARAMS -f $DOCKERFILE $BUILDPATH
 else
-  LOCAL_TAG=$NAMESPACE/$IMAGE:$TARGET_PLATFORM
+  LOCAL_TAG=$NAMESPACE/$IMAGE:$VERSION_LABEL-$TARGET_PLATFORM
   echo_highlight "Running multi-architecture build using docker buildx >>>"
   docker buildx build --progress plain \
     --load \
