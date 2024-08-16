@@ -8,7 +8,7 @@ on:
 env:
   CRYPTO_VERSION: 43.0.0
   WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
-  WHEELS: $GITHUB_WORKSPACE/build/wheels/
+  WHEELS: $GITHUB_WORKSPACE/build/image/
 jobs:
   build-cli-base-amd64:
     runs-on: ubuntu-latest
@@ -32,7 +32,6 @@ jobs:
       - name: Build the docker image
         run: |
           python3 -m pip install docker-squash
-          mkdir -p $WHEELS
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
           docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
 
@@ -64,9 +63,9 @@ jobs:
       - name: Build the docker image
 
         run: |
-          python3 -m pip install docker-squash        
-          mkdir -p $WHEELS
-          wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" "$WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION-cp311-cp311-linux_s390x.whl" -P $WHEELS
+          python3 -m pip install docker-squash     
+          ls -lrt
+          wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" "$WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION-cp311-cp311-linux_s390x.whl" $GITHUB_WORKSPACE/image/install
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
           docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
       - name: Push the docker image
