@@ -15,9 +15,8 @@ RUN dnf update -y --skip-broken --nobest &&\
 # 2. Upgrade pip, install wheel, then install Python modules
 USER default
 
-RUN mkdir -p /tmp/wheels
-COPY wheels /tmp/wheels
 COPY --chown=default:root install /tmp/install
+COPY   wheels /tmp/wheels
 RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
    pip3 install --upgrade -r /tmp/install/requirements.txt --find-links /tmp/wheels &&\
    python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
