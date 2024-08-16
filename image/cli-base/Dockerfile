@@ -17,6 +17,7 @@ USER default
 
 RUN mkdir -p /tmp/wheels
 COPY wheels /tmp/wheels
+RUN ls -lrt /tmp/wheels
 COPY --chown=default:root install /tmp/install
 RUN ls -lrt /tmp/install
 
