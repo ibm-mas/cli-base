@@ -32,7 +32,7 @@ jobs:
       # -------------------------------------------------------------------------------------------
       - name: Build the docker image
         run: |
-          mkdir $GITHUB_WORKSPACE/wheels
+          mkdir -p /wheels
           python3 -m pip install docker-squash
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
           docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
@@ -67,9 +67,9 @@ jobs:
         run: |
           python3 -m pip install docker-squash     
           ls -lrt 
-          mkdir $GITHUB_WORKSPACE/wheels
-          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION-cp37-abi3-linux_s390x.whl" -P $GITHUB_WORKSPACE/wheels/
-          ls -lrt  $GITHUB_WORKSPACE/wheels
+          mkdir -p /wheels
+          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION-cp37-abi3-linux_s390x.whl" -P /wheels/
+          ls -lrt  /wheels
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
           docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
       - name: Push the docker image
