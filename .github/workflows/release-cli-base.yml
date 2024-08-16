@@ -1,4 +1,4 @@
-name: Release CLI Base
+  name: Release CLI Base
 on:
   push:
     branches-ignore:
@@ -6,7 +6,7 @@ on:
     tags:
       - '**'
 jobs:
-  build-cli-base:
+  build-cli-base-amd64:
     runs-on: ubuntu-latest
     steps:
       # 1. Setup
