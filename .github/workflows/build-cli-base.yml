@@ -9,6 +9,7 @@ env:
   CRYPTO_VERSION: 43.0.0
   WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
   WHEELS: $GITHUB_WORKSPACE/build/install/
+  ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 jobs:
   build-cli-base-amd64:
     runs-on: ubuntu-latest
