@@ -72,12 +72,14 @@ jobs:
         with:
           name: cryptography-43.0.0-cp37-abi3-linux_s390x.whl
           path: ${{ github.workspace }}/image/install/cryptography-43.0.0-cp37-abi3-linux_s390x.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: download whl files
         id: download-whl
         uses: actions/download-artifact@v4
         with:
           name: cryptography-43.0.0-cp37-abi3-linux_s390x.whl
           path: ${{ github.workspace }}/image/install/cryptography-43.0.0-cp37-abi3-linux_s390x.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build the docker image
         run: |
