@@ -71,6 +71,6 @@ jobs:
       # 3. Manifest and publish release base container image
       # -------------------------------------------------------------------------------------------
       - name: Publish release
-        needs: [build-cli-base-amd64,build-cli-base-s390x]
+        needs: [build-cli-base-amd64, build-cli-base-s390x]
         run: |
             $GITHUB_WORKSPACE/build/bin/docker-publish-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
