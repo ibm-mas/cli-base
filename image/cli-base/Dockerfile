@@ -14,7 +14,7 @@ RUN dnf update -y --skip-broken --nobest &&\
 
 # 2. Upgrade pip, install wheel, then install Python modules
 USER default
-
+COPY  install /tmp/install
 COPY --chown=default:root install /tmp/install
 RUN ls -lrt /tmp/install
 
