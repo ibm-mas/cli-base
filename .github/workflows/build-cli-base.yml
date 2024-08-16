@@ -5,6 +5,10 @@ on:
       - '**'
     tags-ignore:
       - '**'
+env:
+  CRYPTO_VERSION=43.0.0
+  WHEELS_URL=https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
+  WHEELS=$GITHUB_WORKSPACE/build/wheels/
 jobs:
   build-cli-base-amd64:
     runs-on: ubuntu-latest
@@ -57,10 +61,7 @@ jobs:
       # 2. Build and Publish CLI base container image
       # -------------------------------------------------------------------------------------------
       - name: Build the docker image
-        env:
-          CRYPTO_VERSION=43.0.0
-          WHEELS_URL=https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
-          WHEELS=$GITHUB_WORKSPACE/build/wheels/
+
         run: |
           python3 -m pip install docker-squash        
           mkdir $WHEELS
