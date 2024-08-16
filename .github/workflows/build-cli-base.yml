@@ -64,8 +64,8 @@ jobs:
       # -------------------------------------------------------------------------------------------
       - name: downloads
         run: |
-          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-43.0.0-cp37-abi3-linux_s390x.whl" -P $GITHUB_WORKSPACE/
-          ls -lrt $GITHUB_WORKSPACE/
+          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-43.0.0-cp37-abi3-linux_s390x.whl" -P ${{ github.workspace }}/image/install
+          ls -lrt ${{ github.workspace }}/image/install
       - name: upload whl files
         id: upload-whl
         uses: actions/upload-artifact@v4
