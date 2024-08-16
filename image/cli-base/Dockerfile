@@ -1,4 +1,4 @@
-    FROM registry.access.redhat.com/ubi9/python-39
+FROM registry.access.redhat.com/ubi9/python-39
 ARG VERSION_LABEL
 ARG ARCHITECTURE
 # ----- Start as "default" user ----------------------------------------------
@@ -16,6 +16,7 @@ RUN dnf update -y --skip-broken --nobest &&\
 USER default
 
 COPY --chown=default:root install /tmp/install
+
 RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
     pip3 install --upgrade -r /tmp/install/requirements.txt --find-links /tmp/install &&\
     python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
