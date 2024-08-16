@@ -67,9 +67,9 @@ jobs:
           wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-43.0.0-cp37-abi3-linux_s390x.whl" -P $GITHUB_WORKSPACE/
       - name: upload whl files
         id: upload-whl
-        uses: actions/upload-artifact@v4
+        uses: actions/download-artifact@v4
         with:
-          name: ${{ github.workspace }}/cryptography-43.0.0-cp37-abi3-linux_s390x.whl
+          name: cryptography-43.0.0-cp37-abi3-linux_s390x.whl
           path: ${{ github.workspace }}/image/install/
       - name: Build the docker image
         run: |
