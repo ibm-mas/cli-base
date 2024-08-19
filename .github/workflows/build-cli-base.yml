@@ -87,7 +87,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Initialise the build system
-          run: |
+        run: |
             chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
       - name: Publish release
         run: |
