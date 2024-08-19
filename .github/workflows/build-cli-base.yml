@@ -59,22 +59,6 @@ jobs:
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
-
-      # 2. Build and Publish CLI base container image
-      # -------------------------------------------------------------------------------------------
-      - name: downloads
-        run: |
-          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-43.0.0-cp37-abi3-linux_s390x.whl" -P ${{ github.workspace }}/image/install
-          ls -lrt ${{ github.workspace }}/image/install
-      - name: upload whl files
-        id: upload-whl
-        uses: actions/upload-artifact@v4
-        with:
-          name: cryptography-43.0.0-cp37-abi3-linux_s390x.whl
-          path: ${{ github.workspace }}/image/install/cryptography-43.0.0-cp37-abi3-linux_s390x.whl
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            ls -lrt ${{ github.workspace }}/image/install
       - name: Build the docker image
         run: |
           python3 -m pip install docker-squash     
