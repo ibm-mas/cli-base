@@ -1,4 +1,4 @@
-  name: Release CLI Base
+name: Release CLI Base
 on:
   push:
     branches-ignore:
@@ -36,6 +36,7 @@ jobs:
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
           docker push quay.io/ibmmas/cli-base:latest-amd64
+
   build-cli-base-s390x:
     runs-on: ubuntu-latest
     steps:
@@ -66,9 +67,7 @@ jobs:
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
           docker push quay.io/ibmmas/cli-base:latest-s390x
-          
-          # 3. Manifest and publish release base container image
-        # -------------------------------------------------------------------------------------------
+
     build-cli-manifest:
       runs-on: ubuntu-latest
       needs: [ build-cli-base-amd64, build-cli-base-s390x ]
@@ -85,6 +84,8 @@ jobs:
             chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
             $GITHUB_WORKSPACE/build/bin/initbuild.sh
             source $GITHUB_WORKSPACE/build/bin/.functions.sh
+        # 2. Manifest and publish release base container image
+        # -------------------------------------------------------------------------------------------
         - name: Publish release
           run: |
             docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io

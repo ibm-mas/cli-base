@@ -71,19 +71,19 @@ jobs:
                 wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" $WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION.whl -O $GITHUB_WORKSPACE/image/cli-base/install/cryptography-$CRYPTO_VERSION.whl
           fi
       # 3. Build and Publish CLI base container image for s390x
-      # -------------------------------------------------------------------------------------------
-          - name: Build the docker image
-            run: |
-              python3 -m pip install docker-squash
-              $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
-              docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
+      # ------------------------------------------------------------
+      - name: Build the docker image
+        run: |
+          python3 -m pip install docker-squash
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
 
-          - name: Push the docker image
-            id: push_to_quay
-            run: |
-              docker images
-              docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-              docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
+      - name: Push the docker image
+        id: push_to_quay
+        run: |
+          docker images
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
 
   build-cli-manifest:
     runs-on: ubuntu-latest
@@ -101,8 +101,8 @@ jobs:
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
-     # 3. Manifest and publish release base container image of cli
-     # -------------------------------------------------------------------------------------------
+      # 3. Manifest and publish release base container image of cli
+      # -------------------------------------------------------------------------------------------
       - name: Publish release cli
         run: |
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
