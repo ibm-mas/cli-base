@@ -29,68 +29,16 @@ jobs:
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-      # 2. Build and Publish CLI base container image
-      # -------------------------------------------------------------------------------------------
-      - name: Build the docker image
+      - name: downloads
         run: |
-          mkdir $GITHUB_WORKSPACE/wheels
-          python3 -m pip install docker-squash
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
-
-      - name: Push the docker image
-        id: push_to_quay
-        run: |
-          docker images
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
-  build-cli-base-s390x:
-    runs-on: ubuntu-latest
-    steps:
-      # 1. Setup
-      # -------------------------------------------------------------------------------------------
-      - name: Checkout
-        uses: actions/checkout@v3
-        # Without this option, we don't get the tag information
+          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-43.0.0-cp37-abi3-linux_s390x.whl" -P ${{ github.workspace }}/image/install
+          ls -lrt ${{ github.workspace }}/image/install
+      - name: upload whl files
+        id: upload-whl
+        uses: actions/upload-artifact@v4
         with:
-          fetch-depth: 0
-
-      - name: Initialise the build system
-        run: |
-          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
-          $GITHUB_WORKSPACE/build/bin/initbuild.sh
-          source $GITHUB_WORKSPACE/build/bin/.functions.sh
-      - name: Build the docker image
-        run: |
-          python3 -m pip install docker-squash     
-          ls -lrt  $GITHUB_WORKSPACE
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
-      - name: Push the docker image
-        id: push_to_quay
-        run: |
-          docker images
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
-
-        # 3. Manifest and publish release base container image
-        # -------------------------------------------------------------------------------------------
-  build-cli-manifest:
-    runs-on: ubuntu-latest
-    needs: [build-cli-base-amd64, build-cli-base-s390x]
-    steps:
-      # 1. Setup
-      # -------------------------------------------------------------------------------------------
-      - name: Checkout
-        uses: actions/checkout@v3
-        # Without this option, we don't get the tag information
-        with:
-          fetch-depth: 0
-      - name: Initialise the build system
-        run: |
-            chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
-            $GITHUB_WORKSPACE/build/bin/initbuild.sh
-            source $GITHUB_WORKSPACE/build/bin/.functions.sh
-      - name: Publish release
-        run: |
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
+          name: cryptography-43.0.0-cp37-abi3-linux_s390x.whl
+          path: ${{ github.workspace }}/image/install/cryptography-43.0.0-cp37-abi3-linux_s390x.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            ls -lrt ${{ github.workspace }}/image/install
