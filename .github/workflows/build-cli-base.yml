@@ -5,11 +5,6 @@ on:
       - '**'
     tags-ignore:
       - '**'
-env:
-  CRYPTO_VERSION: 43.0.0
-  WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
-  WHEELS: $GITHUB_WORKSPACE/build/install/
-  ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 jobs:
   build-cli-base-amd64:
     runs-on: ubuntu-latest
@@ -17,7 +12,7 @@ jobs:
       # 1. Setup
       # -------------------------------------------------------------------------------------------
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
@@ -33,7 +28,6 @@ jobs:
       # -------------------------------------------------------------------------------------------
       - name: Build the docker image
         run: |
-          mkdir $GITHUB_WORKSPACE/wheels
           python3 -m pip install docker-squash
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
           docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
@@ -44,13 +38,14 @@ jobs:
           docker images
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
+
   build-cli-base-s390x:
     runs-on: ubuntu-latest
     steps:
       # 1. Setup
       # -------------------------------------------------------------------------------------------
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
@@ -60,18 +55,37 @@ jobs:
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
+        # 2. Download Ansible collection from Artifactory
+          # -------------------------------------------------------------------------------------------
+      - name: Download whl from Artifactory
+        id: download-whl
+        if: contains(fromJson('["push", "workflow_dispatch", "repository_dispatch"]'), github.event_name)
+        env:
+          CRYPTO_VERSION: 42.0.8-cp311-cp311-linux_s390x
+          WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+        run: |
+          if [[ -e $GITHUB_WORKSPACE/image/cli-base/install/cryptography-$CRYPTO_VERSION.whl ]]; then
+                echo "Found a local cryptography-$CRYPTO_VERSION ! Skip download from Artifactory..."
+          else
+                echo "Downloading from artifactory/wiotp-generic-local/dependencies/wheels/s390x/cryptography-$CRYPTO_VERSION.whl"
+                wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" $WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION.whl -O $GITHUB_WORKSPACE/image/cli-base/install/cryptography-$CRYPTO_VERSION.whl
+          fi
       - name: Build the docker image
         run: |
           python3 -m pip install docker-squash     
-          ls -lrt  $GITHUB_WORKSPACE
+          ls -lrt  $GITHUB_WORKSPACE/image/cli-base/install
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:s390x
+          docker tag ibmmas/cli-base:s390x quay.io/ibmmas/cli-base:latest
       - name: Push the docker image
         id: push_to_quay
         run: |
           docker images
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x 
+          docker push quay.io/ibmmas/cli-base:latest-s390x
 
         # 3. Manifest and publish release base container image
         # -------------------------------------------------------------------------------------------
@@ -82,7 +96,7 @@ jobs:
       # 1. Setup
       # -------------------------------------------------------------------------------------------
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
