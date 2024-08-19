@@ -91,4 +91,4 @@ jobs:
             chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
       - name: Publish release
         run: |
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base:${{ env.DOCKER_TAG }} --target-platforms amd64,s390x
