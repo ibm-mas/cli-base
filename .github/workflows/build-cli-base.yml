@@ -62,7 +62,7 @@ jobs:
         id: download-whl
         if: contains(fromJson('["push", "workflow_dispatch", "repository_dispatch"]'), github.event_name)
         env:
-          CRYPTO_VERSION: 42.0.8-cp311-cp311-linux_s390x
+          CRYPTO_VERSION: 43.0.0-cp37-abi3-linux_s390x
           WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: |
