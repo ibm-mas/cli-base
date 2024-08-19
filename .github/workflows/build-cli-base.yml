@@ -89,6 +89,8 @@ jobs:
       - name: Initialise the build system
         run: |
             chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+            $GITHUB_WORKSPACE/build/bin/initbuild.sh
+            source $GITHUB_WORKSPACE/build/bin/.functions.sh
       - name: Publish release
         run: |
           $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base:${{ env.DOCKER_TAG }} --target-platforms amd64,s390x
