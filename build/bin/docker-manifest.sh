@@ -52,7 +52,7 @@ done
 # =====================================================================================================================
 # Generate manifest
 # =====================================================================================================================
-
+ARTIFACTORY_REPO=quay.io
 FQ_IMAGE_WITH_TAG=$NAMESPACE/$IMAGE:${MANIFEST_PREFIX}${DOCKER_TAG}
 ARTIFACTORY_SRC=$ARTIFACTORY_REPO/$NAMESPACE/$IMAGE:${DOCKER_TAG}
 ARTIFACTORY_DEST=$ARTIFACTORY_REPO/$FQ_IMAGE_WITH_TAG
