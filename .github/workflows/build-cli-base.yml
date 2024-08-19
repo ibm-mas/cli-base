@@ -93,4 +93,5 @@ jobs:
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
       - name: Publish release
         run: |
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
           $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
