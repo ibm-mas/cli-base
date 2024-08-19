@@ -11,35 +11,37 @@ env:
   WHEELS: $GITHUB_WORKSPACE/build/install/
   ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 jobs:
-  build-cli-base-amd64:
+  pre-builds:
     runs-on: ubuntu-latest
     steps:
-      # 1. Setup
-      # -------------------------------------------------------------------------------------------
       - name: Checkout
-        uses: actions/checkout@v4
-        # Without this option, we don't get the tag information
-        with:
-          fetch-depth: 0
-
+          uses: actions/checkout@v4
+          # Without this option, we don't get the tag information
+          with:
+            fetch-depth: 0
       - name: Initialise the build system
         run: |
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
           ls -lrt
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
-
       - name: downloads
-        run: |
-          wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-43.0.0-cp37-abi3-linux_s390x.whl" -P ${{ github.workspace }}/image/install
-          ls -lrt ${{ github.workspace }}/image/install
-      - name: upload whl files
-        id: upload-whl
+          run: |
+            wget --header="Authorization:Bearer "${{ secrets.ARTIFACTORY_TOKEN }}"" "$WHEELS_URL/s390x/cryptography-42.0.0-cp311-cp311-linux_s390x.whl " -P ${{ github.workspace }}/image/install
+            ls -lrt ${{ github.workspace }}/image/install
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cryptography-43.0.0-cp37-abi3-linux_s390x.whl
-          path: ${{ github.workspace }}/image/install/cryptography-43.0.0-cp37-abi3-linux_s390x.whl
+          name: cryptography-42.0.0-cp311-cp311-linux_s390x.whl
+          path: ${{ github.workspace }}/image/install/cryptography-42.0.0-cp311-cp311-linux_s390x.whl
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: getartifact
-        run: |
-          ls -lrt ${{ github.workspace }}/image/install
+      download:
+        needs: pre-builds
+        runs-on: ubuntu-latest
+        steps:
+          - name: Download All Artifacts
+            uses: actions/download-artifact@v4
+            with:
+              path: ${{ github.workspace }}/image/install/cryptography-42.0.0-cp311-cp311-linux_s390x.whl
+              merge-multiple: true
+          - run: ls -R ${{ github.workspace }}/image/install/cryptography-42.0.0-cp311-cp311-linux_s390x.whl
