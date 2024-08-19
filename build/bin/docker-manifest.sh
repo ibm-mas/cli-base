@@ -56,14 +56,18 @@ done
 FQ_IMAGE_WITH_TAG=$NAMESPACE/$IMAGE:${MANIFEST_PREFIX}${DOCKER_TAG}
 ARTIFACTORY_SRC=$ARTIFACTORY_REPO/$NAMESPACE/$IMAGE:${DOCKER_TAG}
 ARTIFACTORY_DEST=$ARTIFACTORY_REPO/$FQ_IMAGE_WITH_TAG
+echo $ARTIFACTORY_SRC
+echo $ARTIFACTORY_DEST
 # Publish manifest to Artifactory
 # -----------------------------------------------------------------------------
 echo_h2 "Publishing manifest to Artifactory ($TARGET_PLATFORMS)"
 MANIFEST_CMD="docker manifest create $ARTIFACTORY_DEST"
+$MANIFEST_CMD
 
 for TARGET_PLATFORM in $TARGET_PLATFORMS; do
   echo "Adding $TARGET_PLATFORM"
   MANIFEST_CMD="${MANIFEST_CMD} ${ARTIFACTORY_SRC}-${TARGET_PLATFORM}"
+  echo $MANIFEST_CMD
 done
 $MANIFEST_CMD
 
