@@ -22,7 +22,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
 
 # 3. Install required tools & Ansible collections
 USER root
-RUN echo $ARCHITECTURE
+
 RUN umask 0002 && \
     bash /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
