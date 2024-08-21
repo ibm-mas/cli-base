@@ -14,12 +14,15 @@ RUN dnf update -y --skip-broken --nobest &&\
 
 # 2. Upgrade pip, install wheel, then install Python modules
 USER default
+
 COPY --chown=default:root install /tmp/install
 RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
     pip3 install -r /tmp/install/requirements.txt --find-links /tmp/install
+    #python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
 
 # 3. Install required tools & Ansible collections
 USER root
+
 RUN umask 0002 && \
     bash /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \

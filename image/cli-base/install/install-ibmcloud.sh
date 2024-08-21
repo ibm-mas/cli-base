@@ -24,10 +24,10 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 
 CLI_VERSION=2.26.1
-wget -q https://download.clis.cloud.ibm.com/ibm-cloud-cli/${CLI_VERSION}/IBM_Cloud_CLI_${CLI_VERSION}_amd64.tar.gz
-tar -xzf IBM_Cloud_CLI_${CLI_VERSION}_amd64.tar.gz
+wget -q https://download.clis.cloud.ibm.com/ibm-cloud-cli/${CLI_VERSION}/IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
+tar -xzf IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 mv Bluemix_CLI/bin/ibmcloud /usr/local/bin/
-rm -rf Bluemix_CLI IBM_Cloud_CLI_${CLI_VERSION}_amd64.tar.gz
+rm -rf Bluemix_CLI IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 ibmcloud plugin repo-plugins -r 'IBM Cloud'
 ibmcloud plugin install container-service
 ibmcloud plugin install container-registry
