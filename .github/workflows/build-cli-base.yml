@@ -6,7 +6,7 @@ on:
     tags-ignore:
       - '**'
 jobs:
-  build-cli-base:
+  build-cli-base-amd64:
     runs-on: ubuntu-latest
     steps:
       # 1. Setup
