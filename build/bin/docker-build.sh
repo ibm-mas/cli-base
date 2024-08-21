@@ -85,3 +85,4 @@ else
     --build-arg VCS_REF=$GITHUB_SHA \
     --build-arg VCS_URL=https://github.com/$GITHUB_REPOSITORY \
     -t $LOCAL_TAG $EXTRA_PARAMS -f $DOCKERFILE $BUILDPATH || exit 1
+fi
