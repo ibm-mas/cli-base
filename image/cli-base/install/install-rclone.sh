@@ -29,11 +29,16 @@
           rm -rf rclone-*
         else
           # doesnt have rclone-current.tar.gz
+          PRESERVE_ENVARS=~/.bash_profile
           wget https://go.dev/dl/go1.21.0.linux-s390x.tar.gz
           chmod ugo+r go1.21.0.linux-s390x.tar.gz
           sudo tar -C /usr/local -xzf go1.21.0.linux-s390x.tar.gz
+          echo "export PATH=/usr/local/go/bin:$PATH" >> $PRESERVE_ENVARS
           export PATH=/usr/local/go/bin:$PATH
-          go version
+          echo "export GOPATH=$(go env GOPATH)" >> $PRESERVE_ENVARS
+         go version
+          mkdir -p $GOPATH/src
+          cd $GOPATH/src
           curl -O  https://downloads.rclone.org/v1.67.0/rclone-v1.67.0.tar.gz
           tar -xvzf rclone-v1.67.0.tar.gz
           cd rclone-v1.67.0
