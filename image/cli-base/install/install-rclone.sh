@@ -31,7 +31,7 @@
         # doesnt have rclone-current.tar.gz
         curl -O  https://downloads.rclone.org/v1.67.0/rclone-v1.67.0.tar.gz
         tar -xvzf rclone-v1.67.0.tar.gz
-        cd rclone-v1.58.0
+        cd rclone-v1.67.0
         go build -o rclone
         ./rclone --version
         cp rclone /usr/bin/
