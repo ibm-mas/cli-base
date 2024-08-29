@@ -34,9 +34,15 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
 else
 
   curl -O  https://downloads.rclone.org/v1.58.0/rclone-v1.58.0.tar.gz
-    unzip rclone-current-linux-amd64.zip
-    cp ./rclone-*-linux-amd64/rclone /usr/local/bin/
-    rm -rf rclone-*
+   tar -xvzf rclone-v1.58.0.tar.gz
+   cd rclone-*
+   go build -o rclone
+   ./rclone --version
+   sudo cp rclone /usr/bin/
+   sudo chmod +x /usr/bin/rclone
+   rclone --version
+   cd ..
+   rm -rf rclone-*
 fi
 
 
