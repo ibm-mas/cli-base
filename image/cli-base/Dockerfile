@@ -35,20 +35,20 @@ USER root
 RUN bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE
     #bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
 
-RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then \
-         bash /tmp/install/install-aws.sh; \
-         bash /tmp/install/install-rosa.sh; \
-
-     fi
-
-RUN rm -rf /tmp/install && \
-    rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
-
-# 4. Install tini
-ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-$ARCHITECTURE /tini
-RUN chmod +x /tini
-
-# 11. Setup working environment
-WORKDIR /mascli
-ENTRYPOINT ["/tini", "--"]
-CMD bash
+# RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then \
+#          bash /tmp/install/install-aws.sh; \
+#          bash /tmp/install/install-rosa.sh; \
+#
+#      fi
+#
+# RUN rm -rf /tmp/install && \
+#     rm /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
+#
+# # 4. Install tini
+# ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-$ARCHITECTURE /tini
+# RUN chmod +x /tini
+#
+# # 11. Setup working environment
+# WORKDIR /mascli
+# ENTRYPOINT ["/tini", "--"]
+# CMD bash

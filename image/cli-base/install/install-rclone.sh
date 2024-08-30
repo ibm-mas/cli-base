@@ -28,7 +28,9 @@
           rm -rf rclone-*
         else
           wget -q --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz
+          ls -lrt
           tar -xvzf rclone.tar.gz
+          ls -lrt
           cp rclone /usr/local/bin/
           rclone version
           rm -rf rclone.tar.gz
