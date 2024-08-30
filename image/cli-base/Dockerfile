@@ -25,15 +25,15 @@ USER root
 
 RUN umask 0002 && \
     bash /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
+   # bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
 
-    bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
+    #bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
     bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
+    #bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
 
 RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then \
          bash /tmp/install/install-aws.sh; \
