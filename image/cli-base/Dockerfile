@@ -4,4 +4,5 @@ ARG ARCHITECTURE
 USER default
 COPY --chown=default:root install /tmp/install
 USER root
+RUN ls -lrt
 RUN bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE
