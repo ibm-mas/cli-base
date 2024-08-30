@@ -16,15 +16,15 @@ RUN dnf update -y --skip-broken --nobest &&\
 USER default
 
 COPY --chown=default:root install /tmp/install
-RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
-    pip3 install -r /tmp/install/requirements.txt --find-links /tmp/install
+#RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
+ #   pip3 install -r /tmp/install/requirements.txt --find-links /tmp/install
     #python3 -m pip install --no-cache-dir -r /tmp/install/requirements.txt
 
 # 3. Install required tools & Ansible collections
 USER root
 
-RUN umask 0002 && \
-    bash /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
+#RUN umask 0002 && \
+    #bash /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
    # bash /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
@@ -32,7 +32,7 @@ RUN umask 0002 && \
     #bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
-    bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE && \
+RUN bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE &&
     #bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
 
 RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then \
