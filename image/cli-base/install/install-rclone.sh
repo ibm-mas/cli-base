@@ -19,7 +19,7 @@
             shift
             shift
         done
-
+       echo "rclone $PWD"
         if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
           curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
           unzip rclone-current-linux-amd64.zip
@@ -28,6 +28,7 @@
           rm -rf rclone-*
         else
           echo "s390x rclone"
+          cd /tmp/install
           #wget -q --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz
           ls -lrt
           tar -xvzf rclone.tar.gz

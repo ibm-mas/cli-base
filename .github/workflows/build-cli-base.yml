@@ -64,6 +64,7 @@ jobs:
           WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: |
+          wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
           if [[ -e $GITHUB_WORKSPACE/image/cli-base/install/cryptography-$CRYPTO_VERSION.whl ]]; then
                 echo "Found a local cryptography-$CRYPTO_VERSION ! Skip download from Artifactory..."
           else
