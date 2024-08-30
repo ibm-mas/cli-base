@@ -7,10 +7,10 @@ ARG ARCHITECTURE
 
 # 1. Upgrade system packages
 USER root
-RUN dnf update -y --skip-broken --nobest &&\
-    dnf upgrade -y --skip-broken --nobest &&\
-    dnf install nano jq -y &&\
-    dnf clean all
+#RUN dnf update -y --skip-broken --nobest &&\
+ #   dnf upgrade -y --skip-broken --nobest &&\
+ #   dnf install nano jq -y &&\
+ #   dnf clean all
 
 # 2. Upgrade pip, install wheel, then install Python modules
 USER default
@@ -32,7 +32,7 @@ USER root
     #bash /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
     #bash /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
-RUN bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE &&
+RUN bash /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE
     #bash /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE
 
 RUN if [ "${ARCHITECTURE}" == "amd64" ] ; then \
