@@ -58,28 +58,18 @@ function install_yq() {
 # - https://medium.com/@artur.klauser/building-multi-architecture-docker-images-with-buildx-27d80f7e2408
 # - https://stackoverflow.com/questions/65365797/docker-buildx-exec-user-process-caused-exec-format-error
 function install_buildx() {
-
   echo "install_buildx"
-
-
-    mkdir -vp ~/.docker/cli-plugins/
-    #https://download.docker.com/linux/rhel/8/x86_64/stable/Packages/docker-buildx-plugin-0.16.1-1.el8.x86_64.rpm
-    curl --silent -L "https://github.com/docker/buildx/releases/download/v0.11.2/buildx-v0.11.2.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
-    chmod a+x ~/.docker/cli-plugins/docker-buildx
-
-
-    sudo apt-get update
-
-    sudo apt-get install -y qemu-user-static
-
-    qemu-aarch64-static --version
-
-    sudo apt-get install -y binfmt-support
-    update-binfmts --version
-
-    docker buildx create --name mybuilder
-    docker buildx use mybuilder
-
+  mkdir -vp ~/.docker/cli-plugins/
+  #https://download.docker.com/linux/rhel/8/x86_64/stable/Packages/docker-buildx-plugin-0.16.1-1.el8.x86_64.rpm
+  curl --silent -L "https://github.com/docker/buildx/releases/download/v0.11.2/buildx-v0.11.2.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  chmod a+x ~/.docker/cli-plugins/docker-buildx
+  sudo apt-get update
+  sudo apt-get install -y qemu-user-static
+  qemu-aarch64-static --version
+  sudo apt-get install -y binfmt-support
+  update-binfmts --version
+  docker buildx create --name mybuilder
+  docker buildx use mybuilder
   docker version || exit 1
   docker buildx version || exit 1
   docker buildx inspect --bootstrap || exit 1
