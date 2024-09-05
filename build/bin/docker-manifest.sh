@@ -62,8 +62,6 @@ echo "DESC" $ARTIFACTORY_DEST
 # -----------------------------------------------------------------------------
 echo_h2 "Publishing manifest to Artifactory ($TARGET_PLATFORMS)"
 MANIFEST_CMD="docker manifest create $ARTIFACTORY_DEST"
-#docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-
 for TARGET_PLATFORM in $TARGET_PLATFORMS; do
   echo "Adding $TARGET_PLATFORM"
   MANIFEST_CMD="${MANIFEST_CMD} ${ARTIFACTORY_SRC}-${TARGET_PLATFORM}"
