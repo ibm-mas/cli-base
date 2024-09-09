@@ -33,7 +33,7 @@ args = parser.parse_args()
 requirementPath, destination, arch, add_dependency = args.req_file, args.dest, args.arch, args.add_dependency
 
 ARTIFACTORY_URL = "https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/s390x"
-W3_USERNAME, ARTIFACTORY_TOKEN = os.environ["W3_USERNAME"], os.environ["ARTIFACTORY_TOKEN"]
+W3_USERNAME, ARTIFACTORY_TOKEN = "y9bbfm866@nomail.relay.ibm.com", os.environ["ARTIFACTORY_TOKEN"]
 
 # prebuiltpackages: List of packages that are required to download from artifactory. Contains only the package name (Can specify default packages, if required).
 prebuiltpackages = []
