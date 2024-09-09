@@ -156,7 +156,7 @@ def downloadWheelFromArtifactory(wheel_name: str, artifactory_wheels: list) -> N
 # SCRIPT STARTS HERE
 # ************************************************************************************************************#
 # Create a list of requirements to fetch the versions for packages mentioned in preBuiltPackages
-command2=python3 -m pip upgrade
+command2="python3 -m pip install  --upgrade pip"
 os.system(command2)
 
 
