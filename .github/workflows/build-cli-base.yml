@@ -60,17 +60,11 @@ jobs:
         id: download-whl
         if: contains(fromJson('["push", "workflow_dispatch", "repository_dispatch"]'), github.event_name)
         env:
-          CRYPTO_VERSION: 43.0.1-cp37-abi3-linux_s390x
-          WHEELS_URL: https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: |
           wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
-          if [[ -e $GITHUB_WORKSPACE/image/cli-base/install/cryptography-$CRYPTO_VERSION.whl ]]; then
-                echo "Found a local cryptography-$CRYPTO_VERSION ! Skip download from Artifactory..."
-          else
-                echo "Downloading from artifactory/wiotp-generic-local/dependencies/wheels/s390x/cryptography-$CRYPTO_VERSION.whl"
-                wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" $WHEELS_URL/s390x/cryptography-$CRYPTO_VERSION.whl -O $GITHUB_WORKSPACE/image/cli-base/install/cryptography-$CRYPTO_VERSION.whl
-          fi
+          python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography
+
       # 3. Build and Publish CLI base container image for s390x
       # ------------------------------------------------------------
       - name: Build the docker image
