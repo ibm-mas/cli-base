@@ -155,8 +155,11 @@ def downloadWheelFromArtifactory(wheel_name: str, artifactory_wheels: list) -> N
 # ************************************************************************************************************#
 # SCRIPT STARTS HERE
 # ************************************************************************************************************#
-
 # Create a list of requirements to fetch the versions for packages mentioned in preBuiltPackages
+command2=python3 -m pip upgrade
+os.system(command2)
+
+
 extra_index_url = "na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
 command = f"python3 -m pip install --ignore-installed --dry-run -r {requirementPath} --report requirements_report.json --extra-index-url https://{W3_USERNAME}:{ARTIFACTORY_TOKEN}@{extra_index_url}"
 print(command)
