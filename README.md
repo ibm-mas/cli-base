@@ -1,5 +1,5 @@
 # MAS CLI Base Image
-This base container image allows us to build the CLI faster by seperating the bulk of the image build into it's own repository so that it doesn't jhave to be built every time we want to make a change to the CLI.
+This base container image allows us to build the CLI faster by separating the bulk of the image build into it's own repository so that it doesn't jhave to be built every time we want to make a change to the CLI.
 
 Provides:
 
