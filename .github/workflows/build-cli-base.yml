@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-amd64:
-    name: Build Image (s390x)
+    name: Build Image (amd64)
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
@@ -115,6 +115,9 @@ jobs:
           echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 
           $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x
+
+          # Login to quay.io
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
 
           # Re-issue the manifest under an alias where needed
           # https://github.com/docker/buildx/issues/1744#issuecomment-1896645786
