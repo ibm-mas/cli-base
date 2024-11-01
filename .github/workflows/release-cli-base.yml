@@ -20,7 +20,7 @@ jobs:
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-      # 2. Build and Publish CLI base container image
+      # 2. Build and Publish CLI base container image for amd64
       # -------------------------------------------------------------------------------------------
       - name: Build the docker image
         run: |
@@ -51,8 +51,19 @@ jobs:
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-      # 2. Build and Publish CLI base container image
+      # 2. Download Ansible collection from Artifactory
       # -------------------------------------------------------------------------------------------
+      - name: Download whl from Artifactory
+        id: download-whl
+        if: contains(fromJson('["push", "workflow_dispatch", "repository_dispatch"]'), github.event_name)
+        env:
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+        run: |
+          wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
+          python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography
+
+      # 3. Build and Publish CLI base container image for s390x
+      # ------------------------------------------------------------
       - name: Build the docker image
         run: |
           python3 -m pip install docker-squash
@@ -84,9 +95,9 @@ jobs:
             chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
             $GITHUB_WORKSPACE/build/bin/initbuild.sh
             source $GITHUB_WORKSPACE/build/bin/.functions.sh
-        # 2. Manifest and publish release base container image
+      # 3. Manifest and publish release base container image of cli
         # -------------------------------------------------------------------------------------------
-        - name: Publish release
+      - name: Publish release cli
           run: |
             docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
             $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
