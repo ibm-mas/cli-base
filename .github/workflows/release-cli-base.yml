@@ -79,22 +79,22 @@ jobs:
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
           docker push quay.io/ibmmas/cli-base:latest-s390x
 
-    build-cli-manifest:
-      runs-on: ubuntu-latest
-      needs: [ build-cli-base-amd64, build-cli-base-s390x ]
-      steps:
-        # 1. Setup
-        # -------------------------------------------------------------------------------------------
-        - name: Checkout
-          uses: actions/checkout@v4
-          # Without this option, we don't get the tag information
-          with:
-            fetch-depth: 0
-        - name: Initialise the build system
-          run: |
-            chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
-            $GITHUB_WORKSPACE/build/bin/initbuild.sh
-            source $GITHUB_WORKSPACE/build/bin/.functions.sh
+  build-cli-manifest:
+    runs-on: ubuntu-latest
+    needs: [ build-cli-base-amd64, build-cli-base-s390x ]
+    steps:
+      # 1. Setup
+      # -------------------------------------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
       # 3. Manifest and publish release base container image of cli
         # -------------------------------------------------------------------------------------------
       - name: Publish release cli
