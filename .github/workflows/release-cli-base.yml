@@ -98,6 +98,6 @@ jobs:
       # 3. Manifest and publish release base container image of cli
         # -------------------------------------------------------------------------------------------
       - name: Publish release cli
-          run: |
-            docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-            $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
+        run: |
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
