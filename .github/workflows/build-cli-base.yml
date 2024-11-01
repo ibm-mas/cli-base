@@ -1,44 +1,15 @@
 name: Build CLI Base
 on:
   push:
-    branches:
-      - '**'
-    tags-ignore:
-      - '**'
+    branches: [ "**" ]
+    tags-ignore: [ "**" ]
+  release:
+    types: [ published ]
+
 jobs:
-  build-cli-base-amd64:
+  build-cli-base:
     runs-on: ubuntu-latest
-    steps:
-      # 1. Setup
-      # -------------------------------------------------------------------------------------------
-      - name: Checkout
-        uses: actions/checkout@v4
-        # Without this option, we don't get the tag information
-        with:
-          fetch-depth: 0
-      - name: Initialise the build system
-        run: |
-          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
-          $GITHUB_WORKSPACE/build/bin/initbuild.sh
-          source $GITHUB_WORKSPACE/build/bin/.functions.sh
-
-      # 2. Build and Publish CLI base container image for amd64
-      # -------------------------------------------------------------------------------------------
-      - name: Build the docker image
-        run: |
-          python3 -m pip install docker-squash
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform amd64
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
-
-      - name: Push the docker image
-        id: push_to_quay
-        run: |
-          docker images
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
-
-  build-cli-base-s390x:
-    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       # 1. Setup
       # -------------------------------------------------------------------------------------------
@@ -54,51 +25,49 @@ jobs:
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-      # 2. Download Ansible collection from Artifactory
+      # 2. Download Dependencies from Artifactory
       # -------------------------------------------------------------------------------------------
-      - name: Download whl from Artifactory
-        id: download-whl
-        if: contains(fromJson('["push", "workflow_dispatch", "repository_dispatch"]'), github.event_name)
+      - name: Download dependencies from Artifactory
+        id: download-dependencies
         env:
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: |
           wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
           python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography
 
-      # 3. Build and Publish CLI base container image for s390x
-      # ------------------------------------------------------------
+      # 3. Build and Publish CLI base container image
+      # -------------------------------------------------------------------------------------------
       - name: Build the docker image
         run: |
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+
+          # Login to quay.io
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+
+          # Build the images
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform amd64
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform s390x
+
+          # Squash the image layers
           python3 -m pip install docker-squash
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -n ibmmas -i cli-base --target-platform s390x
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
           docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
 
-      - name: Push the docker image
-        id: push_to_quay
-        run: |
+          # List available images
           docker images
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+
+          # Push the images
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
 
-  build-cli-manifest:
-    runs-on: ubuntu-latest
-    needs: [build-cli-base-amd64, build-cli-base-s390x]
-    steps:
-      # 1. Setup
-      # -------------------------------------------------------------------------------------------
-      - name: Checkout
-        uses: actions/checkout@v4
-        # Without this option, we don't get the tag information
-        with:
-          fetch-depth: 0
-      - name: Initialise the build system
-        run: |
-          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
-          $GITHUB_WORKSPACE/build/bin/initbuild.sh
-          source $GITHUB_WORKSPACE/build/bin/.functions.sh
-      # 3. Manifest and publish release base container image of cli
-      # -------------------------------------------------------------------------------------------
-      - name: Publish release cli
-        run: |
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -n ibmmas -i cli-base --target-platforms amd64,s390x
+          # Publish the manifest
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x
+
+          # Re-issue the manifest under an alias where needed
+          # https://github.com/docker/buildx/issues/1744#issuecomment-1896645786
+          if [[ "$GITHUB_REF" == "refs/heads/stable" ]]; then
+            docker buildx imagetools create -t quay.io/ibmmas/cli-base:stable quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}
+          elif [[ "$GITHUB_EVENT_NAME" == "release" ]]; then
+            docker buildx imagetools create -t quay.io/ibmmas/cli-base:latest quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}
+          fi
