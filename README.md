@@ -9,7 +9,7 @@ Provides:
 | `ibmcloud` v2.26.1 | ✔️ | ✔️      |
 | `aws` | ✔️ | ❌    |
 | `helm` v3 | ✔️ | ✔️   |
-| cloudctl` v3.17.0 | ✔️ | ✔️   |
+| `cloudctl` v3.17.0 | ✔️ | ✔️   |
 | `mongosh` v2.2.9 | ✔️ | ✔️   |
 | `mongodump` v100.9.5 | ✔️ | ✔️   |
 | `oc` | ✔️ | ✔️   |
