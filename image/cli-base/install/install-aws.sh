@@ -29,9 +29,9 @@ fi
 if [[ "$TARGET_PLATFORM" == "arm64" ]]
   then TARGET_PLATFORM=aarch64
 fi
-if [[ "$TARGET_PLATFORM" == "s390x" ]]
+if [[ "$TARGET_PLATFORM" == "s390x" ]]; then
   echo "aws cli not supported in s390x"
-  exit
+  exit 0
 fi
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-${TARGET_PLATFORM}.zip" -o "awscliv2.zip"
