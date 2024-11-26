@@ -23,7 +23,10 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 dnf install skopeo hostname httpd-tools -y
 dnf clean all
-wget -q https://github.com/IBM/cloud-pak-cli/releases/download/v3.17.0/cloudctl-linux-$TARGET_PLATFORM.tar.gz
-tar -xf cloudctl-linux-$TARGET_PLATFORM.tar.gz
-mv cloudctl-linux-$TARGET_PLATFORM /usr/bin/cloudctl
-rm cloudctl-linux-$TARGET_PLATFORM.tar.gz
+
+if [[ "$TARGET_PLATFORM" != "arm64" ]]; then
+  wget -q https://github.com/IBM/cloud-pak-cli/releases/download/v3.17.0/cloudctl-linux-$TARGET_PLATFORM.tar.gz
+  tar -xf cloudctl-linux-$TARGET_PLATFORM.tar.gz
+  mv cloudctl-linux-$TARGET_PLATFORM /usr/bin/cloudctl
+  rm cloudctl-linux-$TARGET_PLATFORM.tar.gz
+fi

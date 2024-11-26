@@ -89,12 +89,51 @@ jobs:
           # Push the images
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
 
+  build-arm64:
+    name: Build Image (arm64)
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
+      - name: Build the docker image (arm64)
+        run: |
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+
+          # Login to quay.io
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+
+          # Build the image
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform arm64 -b image/cli-base
+
+          # Squash the image layers
+          python3 -m pip install docker-squash
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64 quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
+
+          # List available images
+          docker images
+
+          # Push the images
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
+
   build-manifest:
     name: Build Manifest
     runs-on: ubuntu-latest
     needs:
       - build-amd64
       - build-s390x
+      - build-amd64
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -118,7 +157,7 @@ jobs:
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
 
           # Publish the manifest
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64
 
           # Re-issue the manifest under an alias where needed
           # https://github.com/docker/buildx/issues/1744#issuecomment-1896645786

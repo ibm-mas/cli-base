@@ -3,30 +3,33 @@
 set -e
 while [[ $# -gt 0 ]]
 do
-    key="$1"
+  key="$1"
 
-    case $key in
-     --target-platform)
-    TARGET_PLATFORM="$2"
-    ;;
-        *)
-        # unknown option, use as additional params directly to docker
-        EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
-        ;;
-    esac
-    shift
-    shift
+  case $key in
+    --target-platform)
+  TARGET_PLATFORM="$2"
+  ;;
+      *)
+      # unknown option, use as additional params directly to docker
+      EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
+      ;;
+  esac
+  shift
+  shift
 done
+
 #fallback to amd64 if architecture not defined
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
+
 # Install OpenShift CLI (latest stable version)
-wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/openshift-client-linux.tar.gz
-tar -zxf openshift-client-linux.tar.gz
+wget -q https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux-$TARGET_PLATFORM.tar.gz
+tar -zxf openshift-client-linux-$TARGET_PLATFORM.tar.gz
 mv oc /usr/local/bin/
 mv kubectl /usr/local/bin/
-rm -f openshift-client-linux.tar.gz
+rm -f openshift-client-linux-$TARGET_PLATFORM.tar.gz
+oc version
 
 # Install oc mirror plugin (latest stable version)
 wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/oc-mirror.tar.gz
