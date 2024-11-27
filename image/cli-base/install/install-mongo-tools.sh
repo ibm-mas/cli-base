@@ -25,33 +25,36 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 
 if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
-  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm" -o mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm
-  rpm -i mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm
-  rm mongodb-mongosh-shared-openssl3-2.2.9.x86_64.rpm
+  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-shared-openssl3-2.3.3.x86_64.rpm" -o mongodb-mongosh-shared-openssl3-2.3.3.x86_64.rpm
+  rpm -i mongodb-mongosh-shared-openssl3-2.3.3.x86_64.rpm
+  rm mongodb-mongosh-shared-openssl3-2.3.3.x86_64.rpm
 elif [[ "$TARGET_PLATFORM" == "arm64" ]]; then
-  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-shared-openssl3-2.2.9.aarch64.rpm" -o mongodb-mongosh-shared-openssl3-2.2.9.aarch64.rpm
-  rpm -i mongodb-mongosh-shared-openssl3-2.2.9.aarch64.rpm
-  rm mongodb-mongosh-shared-openssl3-2.2.9.aarch64.rpm
+  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-shared-openssl3-2.3.3.aarch64.rpm" -o mongodb-mongosh-shared-openssl3-2.3.3.aarch64.rpm
+  rpm -i mongodb-mongosh-shared-openssl3-2.3.3.aarch64.rpm
+  rm mongodb-mongosh-shared-openssl3-2.3.3.aarch64.rpm
 else
-  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-2.2.9.s390x.rpm" -o mongodb-mongosh-2.2.9.s390x.rpm
-  rpm -i mongodb-mongosh-2.2.9.s390x.rpm
-  rm mongodb-mongosh-2.2.9.s390x.rpm
+  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-2.3.3.s390x.rpm" -o mongodb-mongosh-2.3.3.s390x.rpm
+  rpm -i mongodb-mongosh-2.3.3.s390x.rpm
+  rm mongodb-mongosh-2.3.3.s390x.rpm
 fi
+echo "mongosh version:"
 mongosh --version
 
 # Install Mongo Tools
 if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
-  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel90-x86_64-100.9.5.tgz" -o mongodb-database-tools-rhel90-x86_64-100.9.5.tgz
+  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel93-x86_64-100.10.0.tgz" -o mongodb-database-tools-rhel90-x86_64-100.10.0.tgz
 elif [[ "$TARGET_PLATFORM" == "arm64" ]]; then
-  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel90-aarch64-100.9.5.tgz" -o mongodb-database-tools-rhel90-aarch64-100.9.5.tgz
+  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel93-aarch64-100.10.0.tgz" -o mongodb-database-tools-rhel90-aarch64-100.10.0.tgz
 else
-  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel83-s390x-100.9.5.tgz" -o mongodb-database-tools-rhel83-s390x-100.9.5.tgz
+  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel83-s390x-100.10.0.tgz" -o mongodb-database-tools-rhel83-s390x-100.10.0.tgz
 fi
 tar xvfz mongodb-database-tools-rhel*.tgz
 mv mongodb-database-tools-rhel*/bin/* /usr/local/bin/
 rm -rf mongodb-database-tools-rhel*
+
+echo "mongodump version:"
 mongodump --version
-#mongodump version: 100.9.5
+#mongodump version: 100.10.0
   #git version: 90481484c1783826fe26ca18bbdcd30e933f3b88
   #Go version: go1.21.11
   #   os: linux

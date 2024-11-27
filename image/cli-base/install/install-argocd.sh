@@ -25,3 +25,6 @@ fi
 curl -sSL -o argocd-linux-${TARGET_PLATFORM} https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-${TARGET_PLATFORM} && \
     install -m 555 argocd-linux-${TARGET_PLATFORM} /usr/local/bin/argocd && \
     rm argocd-linux-${TARGET_PLATFORM}
+
+echo "ArgoCD version:"
+argocd version --client

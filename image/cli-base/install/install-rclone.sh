@@ -22,13 +22,14 @@ if [[ "$TARGET_PLATFORM" == "amd64" || "$TARGET_PLATFORM" == "arm64" ]]; then
   curl -O https://downloads.rclone.org/rclone-current-linux-${TARGET_PLATFORM}.zip
   unzip rclone-current-linux-${TARGET_PLATFORM}.zip
   cp ./rclone-*-linux-${TARGET_PLATFORM}/rclone /usr/local/bin/
-  rclone version
   rm -rf rclone-*
 else
   echo "s390x rclone"
   cd /tmp/install
   tar -xvzf rclone.tar.gz
   cp rclone /usr/local/bin/
-  rclone version
   rm -rf rclone.tar.gz
 fi
+
+echo "rclone version: "
+rclone version

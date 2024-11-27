@@ -39,4 +39,5 @@ unzip -q awscliv2.zip
 ./aws/install
 rm -rf aws
 rm  awscliv2.zip
+echo "AWS version:"
 aws --version

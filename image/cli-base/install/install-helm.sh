@@ -30,11 +30,12 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   chmod  g=u /usr/local/bin/helm
   chmod 777 /usr/local/bin/helm
 else
-  curl -L https://get.helm.sh/helm-v3.15.3-linux-${TARGET_PLATFORM}.tar.gz -o helm-v3.15.3-linux-${TARGET_PLATFORM}.tar.gz
-  tar -xvzf helm-v3.15.3-linux-${TARGET_PLATFORM}.tar.gz
+  curl -L https://get.helm.sh/helm-v3.16.3-linux-${TARGET_PLATFORM}.tar.gz -o helm-v3.16.3-linux-${TARGET_PLATFORM}.tar.gz
+  tar -xvzf helm-v3.16.3-linux-${TARGET_PLATFORM}.tar.gz
   cd linux-${TARGET_PLATFORM}
   mv helm /usr/local/bin/
   chmod  g=u /usr/local/bin/helm
   chmod 777 /usr/local/bin/helm
-  helm version
 fi
+echo "Helm version:"
+helm version

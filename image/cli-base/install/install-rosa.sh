@@ -30,5 +30,7 @@ tar -xzf rosa-linux.tar.gz
 mv rosa /usr/local/bin/
 chmod +x /usr/local/bin/rosa
 chown default:root /usr/local/bin/rosa
-rosa version
 rm -rf rosa-linux.tar.gz
+
+echo "rosa version:"
+rosa version

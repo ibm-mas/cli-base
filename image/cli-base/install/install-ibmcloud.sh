@@ -23,7 +23,7 @@ if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
 
-CLI_VERSION=2.26.1
+CLI_VERSION=2.30.0
 wget -q https://download.clis.cloud.ibm.com/ibm-cloud-cli/${CLI_VERSION}/IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 tar -xzf IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 mv Bluemix_CLI/bin/ibmcloud /usr/local/bin/
@@ -38,3 +38,6 @@ rm /opt/app-root/src/.bluemix/config.json
 # Fix up permissions so that the group has the same permissions as the (root) user
 chown -R default:root /opt/app-root/src/.bluemix
 chmod -R g=u /opt/app-root/src/.bluemix
+
+echo "Ibmcloud version:"
+ibmcloud version

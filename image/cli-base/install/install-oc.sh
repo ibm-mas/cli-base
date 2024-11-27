@@ -29,6 +29,8 @@ tar -zxf openshift-client-linux.tar.gz
 mv oc /usr/local/bin/
 mv kubectl /usr/local/bin/
 rm -f openshift-client-linux.tar.gz
+
+echo "oc version:"
 oc version
 
 # Install oc mirror plugin (latest stable version)
@@ -37,3 +39,6 @@ tar -zxf oc-mirror.tar.gz
 mv oc-mirror /usr/local/bin/
 chmod +x /usr/local/bin/oc-mirror
 rm -f oc-mirror.tar.gz
+
+echo "oc-mirror version:"
+oc-mirror version --output json
