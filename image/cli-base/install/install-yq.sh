@@ -21,7 +21,7 @@ done
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
-curl -L  "https://github.com/mikefarah/yq/releases/download/v4.35.1/yq_linux_${TARGET_PLATFORM}"  > /usr/bin/yq
+curl -L  "https://github.com/mikefarah/yq/releases/download/v4.44.5/yq_linux_${TARGET_PLATFORM}"  > /usr/bin/yq
 # yq_linux_s390x
 chmod 755 /usr/bin/yq
 
