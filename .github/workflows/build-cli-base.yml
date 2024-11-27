@@ -117,9 +117,9 @@ jobs:
           # Build the image
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform arm64 -b image/cli-base
 
-          # Squash the image layers
-          python3 -m pip install docker-squash
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64 quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
+          # # Squash the image layers
+          # python3 -m pip install docker-squash
+          # docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64 quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
 
           # List available images
           docker images
