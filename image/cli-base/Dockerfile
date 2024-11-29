@@ -23,31 +23,18 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel &&\
 # 3. Install required tools & Ansible collections
 USER root
 
-# RUN umask 0002 && \
-#     bash -x /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-aws.sh --target-platform $ARCHITECTURE && \
-#     bash -x /tmp/install/install-rosa.sh --target-platform $ARCHITECTURE
-
-RUN umask 0002 && bash -x /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-argocd.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-rclone.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-aws.sh  --target-platform $ARCHITECTURE
-RUN umask 0002 && bash -x /tmp/install/install-rosa.sh  --target-platform $ARCHITECTURE
-
+RUN umask 0002 && \
+    bash -x /tmp/install/install-oc.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-ibmpak.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-ibmcloud.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-skopeo.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-helm.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-mongo-tools.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-yq.sh  --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-argocd.sh --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-rclone.sh --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-aws.sh --target-platform $ARCHITECTURE && \
+    bash -x /tmp/install/install-rosa.sh --target-platform $ARCHITECTURE
 
 RUN rm -rf /tmp/install && \
     rm -f /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
