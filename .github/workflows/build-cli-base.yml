@@ -133,7 +133,7 @@ jobs:
     needs:
       - build-amd64
       - build-s390x
-      - build-amd64
+      - build-arm64
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
