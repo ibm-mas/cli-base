@@ -40,3 +40,5 @@ fi
 
 echo "oc ibm-pak version:"
 oc ibm-pak --version
+
+rm -rf /opt/app-root/src/.ibm-pak
