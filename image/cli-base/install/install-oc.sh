@@ -42,3 +42,5 @@ rm -f oc-mirror.tar.gz
 
 echo "oc-mirror version:"
 oc-mirror version --output json
+
+rm -f /opt/app-root/src/.oc-mirror.log
