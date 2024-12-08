@@ -20,10 +20,17 @@ done
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
+if [[ "$TARGET_PLATFORM" == "s390x" ]]; then
+  echo "aws cli not supported in s390x"
+  exit 0
+fi
+
 wget -q https://mirror.openshift.com/pub/openshift-v4/clients/rosa/latest/rosa-linux.tar.gz
 tar -xzf rosa-linux.tar.gz
 mv rosa /usr/local/bin/
 chmod +x /usr/local/bin/rosa
 chown default:root /usr/local/bin/rosa
-rosa version
 rm -rf rosa-linux.tar.gz
+
+echo "rosa version:"
+rosa version
