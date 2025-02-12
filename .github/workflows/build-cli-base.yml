@@ -127,6 +127,50 @@ jobs:
           # Push the images
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
 
+  build-power:
+    name: Build Image (power)
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
+      - name: Build the docker image (power)
+        env:
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+        run: |
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+
+          # Login to quay.io
+          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+
+          # Before we build the power image we need to download some pre-build dependencies from Artifactory
+          #wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
+          #python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography
+
+          # Build the image
+          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform ppc64le -b image/cli-base
+
+          # Squash the image layers
+          python3 -m pip install docker-squash
+          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-ppc64le quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-ppc64le
+
+          # List available images
+          docker images
+
+          # Push the images
+          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-ppc64le
+
   build-manifest:
     name: Build Manifest
     runs-on: ubuntu-latest
@@ -134,6 +178,7 @@ jobs:
       - build-amd64
       - build-s390x
       - build-arm64
+      - build-ppc64le
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -157,7 +202,7 @@ jobs:
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
 
           # Publish the manifest
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64,ppc64le
 
           # Re-issue the manifest under an alias where needed
           # https://github.com/docker/buildx/issues/1744#issuecomment-1896645786
