@@ -33,6 +33,10 @@ if [[ "$TARGET_PLATFORM" == "s390x" ]]; then
   echo "aws cli not supported in s390x"
   exit 0
 fi
+if [[ "$TARGET_PLATFORM" == "ppc64le" ]]; then
+  echo "aws cli not supported in power"
+  exit 0
+fi
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-${TARGET_PLATFORM}.zip" -o "awscliv2.zip"
 unzip -q awscliv2.zip
