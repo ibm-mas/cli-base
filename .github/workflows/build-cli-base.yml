@@ -127,8 +127,8 @@ jobs:
           # Push the images
           docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
 
-  build-power:
-    name: Build Image (power)
+  build-ppc64le:
+    name: Build Image (ppc64le)
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
@@ -158,7 +158,7 @@ jobs:
           #wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
           #python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography
 
-          # Build the image
+          # Build the images
           $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform ppc64le -b image/cli-base
 
           # Squash the image layers
