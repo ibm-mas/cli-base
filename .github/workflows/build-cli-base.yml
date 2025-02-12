@@ -65,6 +65,7 @@ jobs:
       - name: Build the docker image (s390x)
         env:
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+          W3_USERNAME: y9bbfm866@nomail.relay.ibm.com
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
           echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
@@ -74,6 +75,7 @@ jobs:
 
           # Before we build the s390x image we need to download some pre-build dependencies from Artifactory
           #wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
+          pip install -r image/cli-base/install/requirements.txt --extra-index-url https://${W3_USERNAME}:${ARTIFACTORY_TOKEN}@na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple
           python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ 
 
           # Build the images
