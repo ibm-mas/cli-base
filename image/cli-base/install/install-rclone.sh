@@ -18,7 +18,7 @@ do
     shift
 done
 echo "rclone $PWD"
-if [[ "$TARGET_PLATFORM" == "amd64" || "$TARGET_PLATFORM" == "arm64" ]]; then
+if [[ "$TARGET_PLATFORM" == "amd64" || "$TARGET_PLATFORM" == "arm64" || "$TARGET_PLATFORM" == "ppc64le" ]]; then
   curl -O https://downloads.rclone.org/rclone-current-linux-${TARGET_PLATFORM}.zip
   unzip rclone-current-linux-${TARGET_PLATFORM}.zip
   cp ./rclone-*-linux-${TARGET_PLATFORM}/rclone /usr/local/bin/
