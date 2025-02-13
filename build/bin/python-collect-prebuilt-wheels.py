@@ -51,7 +51,7 @@ if target_platform != None:
 else:
     ARTIFACTORY_URL = f"https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/s390x"
 
-W3_USERNAME, ARTIFACTORY_TOKEN = "rajeshri.shil@ibm.com", os.environ["ARTIFACTORY_TOKEN"]
+W3_USERNAME, ARTIFACTORY_TOKEN = "y9bbfm866@nomail.relay.ibm.com", os.environ["ARTIFACTORY_TOKEN"]
 
 # required_packages: Dictionary that contains packages and their version that we will fetch from requirements_report.json.
 required_packages = {}
@@ -131,7 +131,7 @@ def downloadWheelFromArtifactory(wheel_name: str, artifactory_wheels: list) -> N
 # ************************************************************************************************************#
 
 # Generate a requirements_report.json file for the given requirements.txt file
-extra_index_url = f"--extra-index-url https://{W3_USERNAME}:{ARTIFACTORY_TOKEN}@na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
+extra_index_url = f"--extra-index-url https://y9bbfm866@nomail.relay.ibm.com:{ARTIFACTORY_TOKEN}@na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
 base_command = f"python3 -m pip install  --ignore-installed --dry-run -r {requirementPath} --report requirements_report.json {extra_index_url}"
 if python_version == None:
     command = base_command
