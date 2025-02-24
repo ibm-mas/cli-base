@@ -5,6 +5,10 @@ on:
     tags-ignore: [ "**" ]
   release:
     types: [ published ]
+env:
+  ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  QUAYIO_USERNAME:   ${{ secrets.QUAYIO_USERNAME }}
+  QUAYIO_PASSWORD:   ${{ secrets.QUAYIO_PASSWORD }}
 
 jobs:
   build-amd64:
@@ -47,8 +51,6 @@ jobs:
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
       - name: Build the docker image (s390x)
-        env:
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
           source $GITHUB_WORKSPACE/build/bin/build.sh s390x
