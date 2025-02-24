@@ -6,7 +6,7 @@ echo "GITHUB_REF=$GITHUB_REF"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 
 # Login to quay.io
-docker login --username "${{ QUAYIO_USERNAME }}" --password "${{ QUAYIO_PASSWORD }}" quay.io
+docker login --username $QUAYIO_USERNAME --password " $QUAYIO_PASSWORD quay.io
 if [[ "$TARGET_PLATFORM" != "amd64" ] || [ "$TARGET_PLATFORM" != "arm64" ]];
 then
  # Before we build the s390x image we need to download some pre-build dependencies from Artifactory
