@@ -30,8 +30,6 @@ elif  [[ "$TARGET_PLATFORM" == "s390x" ]]; then
   tar -xvzf rclone.tar.gz
   cp rclone /usr/local/bin/
   rm -rf rclone.tar.gz
-elif [[ "$TARGET_PLATFORM" == "ppc64le" ]]; then
-
 fi
 
 echo "rclone version: "

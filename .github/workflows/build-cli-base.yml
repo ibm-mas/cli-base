@@ -11,8 +11,8 @@ env:
   QUAYIO_PASSWORD:   ${{ secrets.QUAYIO_PASSWORD }}
 
 jobs:
-  prebuild:
-    name: Prebuild
+  build-amd64:
+    name: Build Image (amd64)
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
@@ -21,19 +21,13 @@ jobs:
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
+
       - name: Initialise the build system
         run: |
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-  build-amd64:
-    name: Build Image (amd64)
-    runs-on: ubuntu-latest
-    needs:
-      - prebuild
-    if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
-    steps:
       - name: Build the docker image (amd64)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
@@ -42,11 +36,20 @@ jobs:
   build-s390x:
     name: Build Image (s390x)
     runs-on: ubuntu-latest
-    needs:
-      - prebuild
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
-
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
       - name: Build the docker image (s390x)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
@@ -55,10 +58,20 @@ jobs:
   build-arm64:
     name: Build Image (arm64)
     runs-on: ubuntu-latest
-    needs:
-      - prebuild
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
       - name: Build the docker image (arm64)
         run: |
           source $GITHUB_WORKSPACE/build/bin/build.sh arm64
@@ -67,12 +80,23 @@ jobs:
     name: Build Manifest
     runs-on: ubuntu-latest
     needs:
-      - prebuild
       - build-amd64
       - build-s390x
       - build-arm64
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
+
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
+
       - name: Publish the manifest
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
