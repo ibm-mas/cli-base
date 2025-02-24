@@ -75,7 +75,7 @@ jobs:
       - name: Build the docker image (ppc64lc)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
-           wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/$TARGET_PLATFORM/rclone.zip -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.zip
+          wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/ppc64le/rclone.zip -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.zip
           source $GITHUB_WORKSPACE/build/bin/build.sh ppc64le
 
   build-arm64:
