@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+#
 # -----------------------------------------------------------
 # Licensed Materials - Property of IBM
 # 5737-M66, 5900-AAA
@@ -23,33 +25,39 @@ parser.add_argument(
     help="Target location to save the downloaded wheels of the requirements.txt file",
 )
 parser.add_argument(
-    "--arch", type=str, required=False, help="Architecture of the target platform"
+    "--target-platform", type=str, required=False, help="Architecture of the target platform"
 )
 parser.add_argument(
-    "--add-dependency", type=str, required=True, help="Additional dependencies that are image specific. Use ',' for multiple dependencies"
+    "--python-version", type=str, required=False, help="Specifies if a python version other than one installed on the system should be used to generate the package dependency report"
 )
+
+# We are keeping --add-dependency and --no-default-crypto for now so that nothing breaks while we do the transition across all the repos which use this script
+# But we won't be using these parameter going forward
+# TODO: REMOVE THESE ARGUMENTS AFTER THE TRANSITION IS COMPLETE.
+parser.add_argument(
+    "--add-dependency", type=str, required=False, help="Additional dependencies that are image specific. Use ',' for multiple dependencies"
+)
+
+parser.add_argument(
+    "--no-default-crypto", action='store_true', help="If this paf is set, cryptogrpahy will not be added to the default list of requirements"
+)
+
 args = parser.parse_args()
 
-requirementPath, destination, arch, add_dependency = args.req_file, args.dest, args.arch, args.add_dependency
+requirementPath, destination, target_platform, python_version = args.req_file, args.dest, args.target_platform, args.python_version
 
-ARTIFACTORY_URL = "https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/s390x"
-W3_USERNAME, ARTIFACTORY_TOKEN = "y9bbfm866@nomail.relay.ibm.com", os.environ["ARTIFACTORY_TOKEN"]
+if target_platform != None:
+    ARTIFACTORY_URL = f"https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/{target_platform}"
+else:
+    ARTIFACTORY_URL = f"https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/s390x"
 
-# prebuiltpackages: List of packages that are required to download from artifactory. Contains only the package name (Can specify default packages, if required).
-prebuiltpackages = []
+W3_USERNAME, ARTIFACTORY_TOKEN = "Y9BBFM866@nomail.relay.ibm.com", os.environ["ARTIFACTORY_TOKEN"]
 
-#requirements_dict: Dictionary of packages in requirements.txt file given as argument in the format {package_name: version}.
+# required_packages: Dictionary that contains packages and their version that we will fetch from requirements_report.json.
+required_packages = {}
+
 # artifactory_wheels: List of all the packages that are already uploaded to artifactory.
-requirements_dict, artifactory_wheels = {}, []
-
-# The additional dependencies are added to prebuiltpackages list
-if add_dependency != None:
-    new_dependency = add_dependency.split(",")
-    for pkg in new_dependency:
-        prebuiltpackages.append(pkg)
-
-# Initialize the dictionary with None for all prebuilt packages
-prebuiltpackages = {pkg_name: None for pkg_name in prebuiltpackages}
+artifactory_wheels = []
 
 # ************************************************************************************************************#
 
@@ -98,70 +106,38 @@ class MyHTMLParser(HTMLParser):
         if self.recording:
             self.data.append(data)
 
-
-def parserequirementsFile(requirementPath: str) -> dict:
-    """
-    This function parses the requirements file and returns a dictionary of requirements with key as package name and value as its corresponding version.
-    Parameters:
-      requirementPath (str): The path to the requirements file.
-    Returns:
-      A dictionary containing the requirements and their versions.
-    """
-    requirements_dict = {}
-
-    with open(requirementPath, "r") as f:
-        requirements = f.readlines()
-        requirements = [requirement.strip() for requirement in requirements]
-        requirements = [
-            requirement
-            for requirement in requirements
-            if not re.match(r"^\s*(#.*)?$", requirement)
-        ]
-
-    for requirement in requirements:
-        delimiters = ["==", "<", ">", "<=", ">="]
-        for delimiter in delimiters:
-            if delimiter in requirement:
-                key, value = requirement.split(delimiter, 1)
-                requirements_dict[key] = value
-                break
-    return requirements_dict
-
 def downloadWheelFromArtifactory(wheel_name: str, artifactory_wheels: list) -> None:
     """
     Download wheel from Artifactory based on the provided wheel name.
+
     Parameters:
       wheel_name (str): The name of the wheel to download.
       artifactory_wheels (list): A list of wheel names in Artifactory.
+
     Returns:
         None
     """
     regex = re.compile(wheel_name)
-    bool_artifact_found = False
 
     for artifactory_wheel in artifactory_wheels:
         if regex.search(artifactory_wheel):
-            print(f"{artifactory_wheel} found in Artifactory. Downloading...")
+            print(f"Downloading {artifactory_wheel} from artifactory...")
             command = f'wget --header="Authorization:Bearer {ARTIFACTORY_TOKEN}" "{ARTIFACTORY_URL}/{artifactory_wheel}" -P {destination}'
             os.system(command)
-            print(f"Finished downloading {wheel_name} from Artifactory.")
-            bool_artifact_found = True
-            break
-    if bool_artifact_found == False:
-        print(f"{wheel_name} does not exist in Artifactory.\nPlease make sure all the pre build pacakges are available in artifactory before running this script.\nExiting...")
-        print("Please upload the necesessary packages that are missing in the artifatory using the repo https://github.ibm.com/maximoappsuite/python-Zwheel.")
-        exit(1)
+            print(f"Finished downloading {artifactory_wheel} from Artifactory.\n")
 
 # ************************************************************************************************************#
 # SCRIPT STARTS HERE
 # ************************************************************************************************************#
-# Create a list of requirements to fetch the versions for packages mentioned in preBuiltPackages
-command2="python3 -m pip install  --upgrade pip"
-os.system(command2)
 
+# Generate a requirements_report.json file for the given requirements.txt file
+extra_index_url = f"--extra-index-url https://{W3_USERNAME}:{ARTIFACTORY_TOKEN}@na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
+base_command = f"python3 -m pip install  --ignore-installed --dry-run -r {requirementPath} --report requirements_report.json {extra_index_url}"
+if python_version == None:
+    command = base_command
+else:
+    command = f"{base_command} --python-version {python_version } --only-binary=:all:"
 
-extra_index_url = "na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
-command = f"python3 -m pip install --ignore-installed --dry-run -r {requirementPath} --report requirements_report.json --extra-index-url https://{W3_USERNAME}:{ARTIFACTORY_TOKEN}@{extra_index_url}"
 print(command)
 os.system(command)
 
@@ -170,24 +146,20 @@ if os.path.isfile("requirements_report.json"):
     f = open("requirements_report.json")
     requirements_report = json.load(f)
 
-    for installed_package in requirements_report.get("install", []):
-        metadata = installed_package.get("metadata", {})
+    for required_package in requirements_report.get("install", []):
+        metadata = required_package.get("metadata", {})
         package_name = metadata.get("name")
         package_version = metadata.get("version")
-        if package_name in prebuiltpackages:
-            prebuiltpackages[package_name] = package_version
+        required_packages[package_name] = package_version
 else:
     print(f"Failed to generate the requirements_report.json file.\nError in command: python3 -m pip install --ignore-installed --dry-run -r {requirementPath} --report requirements_report.json")
     exit(1)
 
-# Parse the requirements.txt file passed as argument to the script (need to be sent while running the script as argument).
-requirements_dict = parserequirementsFile(requirementPath)
-
-# Fetch the html content with list of all wheels present in the artifactory location.
+# Fetch the html content of all the wheel packages available in the artifactory location
 command = f'wget -q --header="Authorization:Bearer {ARTIFACTORY_TOKEN}" "{ARTIFACTORY_URL}" -O artifactory_list.txt'
 os.system(command)
 
-# If we are able to fetch the HTML contents, parse its contents to generate the list of all wheels available in artifactory.
+# If we are able to fetch the HTML contents, parse its contents to generate the list of all wheels available in artifactory
 if os.path.isfile("artifactory_list.txt"):
     f = open("artifactory_list.txt", "r")
     parser = MyHTMLParser()
@@ -197,27 +169,11 @@ else:
     print(f"Failed to retrieve directory listing.")
     exit(1)
 
-for pb_package_name in prebuiltpackages:
-    pb_package_v = prebuiltpackages[pb_package_name]
+print(f"Looking for all the available prebuiltwheel packages in {ARTIFACTORY_URL}")
+for pb_package_name in required_packages:
+    pb_package_v = required_packages[pb_package_name]
 
-    if pb_package_name in requirements_dict:
-        # If the package is mentioned in requirements.txt, fetch the version from dictionary.
-        version = requirements_dict[pb_package_name]
-        print(
-            f"{pb_package_name}-{version} from prebuiltpackages exists in {requirementPath}"
-        )
-
-        wheel_name = f"{pb_package_name}-{version}"
-        downloadWheelFromArtifactory(wheel_name, artifactory_wheels)
-
-    else:
-        if pb_package_v == 'None':
-            print(f"The package {pb_package_name} has no version specified in {requirementPath}. Please add the version for {pb_package_name} in {requirementPath}")
-            print("Exiting...")
-            exit(1)
-
-        wheel_name = f"{pb_package_name}-{pb_package_v}"
-        print(
-            f"{wheel_name} from prebuiltpackages does not exist in {requirementPath}. Downloading {wheel_name}"
-        )
-        downloadWheelFromArtifactory(wheel_name, artifactory_wheels)
+    if "-" in pb_package_name:
+        pb_package_name = pb_package_name.replace("-", "_")
+    wheel_name = f"{pb_package_name}-{pb_package_v}"
+    downloadWheelFromArtifactory(wheel_name, artifactory_wheels)
