@@ -25,7 +25,6 @@ if [[ "$TARGET_PLATFORM" == "amd64" || "$TARGET_PLATFORM" == "arm64" ]]; then
   rm -rf rclone-*
 elif  [[ "$TARGET_PLATFORM" == "s390x" ]]; then
   echo "s390x rclone"
-  wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
   cd /tmp/install
   tar -xvzf rclone.tar.gz
   cp rclone /usr/local/bin/
