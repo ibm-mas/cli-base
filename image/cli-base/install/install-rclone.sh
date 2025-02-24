@@ -23,8 +23,8 @@ if [[ "$TARGET_PLATFORM" == "amd64" || "$TARGET_PLATFORM" == "arm64" ]]; then
   unzip rclone-current-linux-${TARGET_PLATFORM}.zip
   cp ./rclone-*-linux-${TARGET_PLATFORM}/rclone /usr/local/bin/
   rm -rf rclone-*
-elif  [[ "$TARGET_PLATFORM" == "s390x" ]]; then
-  echo "s390x rclone"
+else
+  echo "rclone ${TARGET_PLATFORM}"
   cd /tmp/install
   tar -xvzf rclone.tar.gz
   cp rclone /usr/local/bin/
