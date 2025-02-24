@@ -53,6 +53,7 @@ jobs:
       - name: Build the docker image (s390x)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
+           wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/$TARGET_PLATFORM/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
           source $GITHUB_WORKSPACE/build/bin/build.sh s390x
   build-ppc64lc:
     name: Build Image (ppc64lc)
@@ -74,6 +75,7 @@ jobs:
       - name: Build the docker image (ppc64lc)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
+           wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/$TARGET_PLATFORM/rclone.zip -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.zip
           source $GITHUB_WORKSPACE/build/bin/build.sh ppc64le
 
   build-arm64:
