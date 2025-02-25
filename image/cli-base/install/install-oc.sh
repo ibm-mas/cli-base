@@ -24,7 +24,7 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 
 # Install OpenShift CLI (latest stable version)
-wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/openshift-client-linux.tar.gz
+wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/4.17.8/openshift-client-linux.tar.gz
 tar -zxf openshift-client-linux.tar.gz
 mv oc /usr/local/bin/
 mv kubectl /usr/local/bin/
@@ -34,7 +34,7 @@ echo "oc version:"
 oc version
 
 # Install oc mirror plugin (latest stable version)
-wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/oc-mirror.tar.gz
+wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/4.17.8/oc-mirror.tar.gz
 tar -zxf oc-mirror.tar.gz
 mv oc-mirror /usr/local/bin/
 chmod +x /usr/local/bin/oc-mirror
