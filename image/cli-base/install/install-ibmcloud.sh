@@ -25,7 +25,7 @@ fi
 
 CLI_VERSION=2.30.0
 wget -q https://download.clis.cloud.ibm.com/ibm-cloud-cli/${CLI_VERSION}/IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
-https://download.clis.cloud.ibm.com/ibm-cloud-cli/2.30.0/IBM_Cloud_CLI_2.30.0_ppc64le.tar.gz
+
 tar -xzf IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 mv Bluemix_CLI/bin/ibmcloud /usr/local/bin/
 rm -rf Bluemix_CLI IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
