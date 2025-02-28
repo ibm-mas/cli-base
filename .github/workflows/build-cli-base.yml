@@ -54,6 +54,7 @@ jobs:
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
            source $GITHUB_WORKSPACE/build/bin/build.sh s390x
+
   build-ppc64lc:
     name: Build Image (ppc64lc)
     runs-on: ubuntu-latest
@@ -128,7 +129,7 @@ jobs:
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
 
           # Publish the manifest
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64,ppc64le
 
           # Re-issue the manifest under an alias where needed
           # https://github.com/docker/buildx/issues/1744#issuecomment-1896645786
