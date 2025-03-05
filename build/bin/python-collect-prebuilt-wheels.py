@@ -51,7 +51,7 @@ if target_platform != None:
 else:
     ARTIFACTORY_URL = f"https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/s390x"
 
-W3_USERNAME, ARTIFACTORY_TOKEN = "Y9BBFM866@nomail.relay.ibm.com", os.environ["ARTIFACTORY_TOKEN"]
+W3_USERNAME, ARTIFACTORY_TOKEN = os.environ["W3_USERNAME"], os.environ["ARTIFACTORY_TOKEN"]
 
 # required_packages: Dictionary that contains packages and their version that we will fetch from requirements_report.json.
 required_packages = {}
