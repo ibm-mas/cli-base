@@ -24,6 +24,7 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 
 # Install OpenShift CLI (latest stable version)
+# setting oc version to 4.17.8 due to issue: MASCORE-5777, Please validate again before April patch release
 wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/4.17.8/openshift-client-linux.tar.gz
 tar -zxf openshift-client-linux.tar.gz
 mv oc /usr/local/bin/
