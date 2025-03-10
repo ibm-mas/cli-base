@@ -9,6 +9,7 @@ env:
   ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
   QUAYIO_USERNAME:   ${{ secrets.QUAYIO_USERNAME }}
   QUAYIO_PASSWORD:   ${{ secrets.QUAYIO_PASSWORD }}
+  W3_USERNAME:       ${{ secrets.W3_USERNAME }}
 
 jobs:
   build-amd64:
