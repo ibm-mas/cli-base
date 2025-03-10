@@ -24,4 +24,4 @@ Provides:
 | `boto3` | ✔️ | ✔️   | ✔️ | ✔️                                          |
 | `argocd` | ✔️ | ✔️   | ✔️ | ✔️                                          |
 
-Note: IBM Cloud Plugin Container-Registry is supported by ppc64le, however IBM Cloud Plugin Container-Service is not.
+Note: IBM Cloud Plugin Container-Registry is supported by ppc64le, however IBM Cloud Plugin Container-Service is not supported.
