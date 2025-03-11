@@ -56,8 +56,8 @@ jobs:
           echo "GITHUB_REF=$GITHUB_REF"
            source $GITHUB_WORKSPACE/build/bin/build.sh s390x
 
-  build-ppc64lc:
-    name: Build Image (ppc64lc)
+  build-ppc64le:
+    name: Build Image (ppc64le)
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
@@ -73,7 +73,7 @@ jobs:
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-      - name: Build the docker image (ppc64lc)
+      - name: Build the docker image (ppc64le)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
           source $GITHUB_WORKSPACE/build/bin/build.sh ppc64le
@@ -106,7 +106,7 @@ jobs:
       - build-amd64
       - build-s390x
       - build-arm64
-      - build-ppc64lc
+      - build-ppc64le
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
