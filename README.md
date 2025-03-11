@@ -3,23 +3,25 @@ This base container image allows us to build the CLI faster by separating the bu
 
 Provides:
 
-| content | amd64 | s390x | arm64 |
-| ---     | --- |------| ----|
-| `python3` v3.9    | ✔️ | ✔️   | ✔️ |
-| `ibmcloud` v2.30.0 | ✔️ | ✔️  | ✔️ |
-| `aws` | ✔️ | ❌    |  ✔️ |
-| `helm` v3 | ✔️ | ✔️   | ✔️ |
-| `mongosh` v2.3.3 | ✔️ | ✔️   | ✔️ |
-| `mongodump` v100.10.0 | ✔️ | ✔️   | ✔️ |
-| `oc` | ✔️ | ✔️   | ✔️ |
-| `oc mirror` | ✔️ | ✔️   | ✔️ |
-| `oc ibm-pak` v1.16.2 | ✔️ | ✔️   | ✔️ |
-| `skopeo` | ✔️ | ✔️   | ✔️ |
-| `nano` | ✔️ | ✔️   | ✔️ |
-| `jq` | ✔️ | ✔️   | ✔️ |
-| `yq` v4.44.5 | ✔️ | ✔️   | ✔️ |
-| `tini` v0.19.0 | ✔️ | ✔️   | ✔️ |
-| `rclone` | ✔️ | ✔️   | ✔️ |
-| `rosa` | ✔️ | ❌ ️  | ✔️ |
-| `boto3` | ✔️ | ✔️   | ✔️ |
-| `argocd` | ✔️ | ✔️   | ✔️ |
+| content | amd64 | s390x | arm64 | ppc64le                                     |
+| ---     | --- |------| ----|---------------------------------------------|
+| `python3` v3.9    | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `ibmcloud` v2.30.0 | ✔️ | ✔️  | ✔️ |  ❌                                          |
+| `aws` | ✔️ | ❌    |  ✔️ | ❌                                           |
+| `helm` v3 | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `mongosh` v2.3.3 | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `mongodump` v100.10.0 | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `oc` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `oc mirror` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `oc ibm-pak` v1.16.2 | ✔️ | ✔️   | ✔️ |✔️ |
+| `skopeo` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `nano` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `jq` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `yq` v4.44.5 | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `tini` v0.19.0 | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `rclone` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `rosa` | ✔️ | ❌ ️  | ✔️ | ❌                                           |
+| `boto3` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+| `argocd` | ✔️ | ✔️   | ✔️ | ✔️                                          |
+
+Note: IBM Cloud Plugin Container-Registry is supported by ppc64le, however IBM Cloud Plugin Container-Service is not supported.

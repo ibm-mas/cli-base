@@ -33,9 +33,9 @@ elif [[ "$TARGET_PLATFORM" == "arm64" ]]; then
   rpm -i mongodb-mongosh-shared-openssl3-2.3.3.aarch64.rpm
   rm mongodb-mongosh-shared-openssl3-2.3.3.aarch64.rpm
 else
-  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-2.3.3.s390x.rpm" -o mongodb-mongosh-2.3.3.s390x.rpm
-  rpm -i mongodb-mongosh-2.3.3.s390x.rpm
-  rm mongodb-mongosh-2.3.3.s390x.rpm
+  curl "https://downloads.mongodb.com/compass/mongodb-mongosh-2.3.3.$TARGET_PLATFORM.rpm" -o mongodb-mongosh-2.3.3.$TARGET_PLATFORM.rpm
+  rpm -i mongodb-mongosh-2.3.3.$TARGET_PLATFORM.rpm
+  rm mongodb-mongosh-2.3.3.$TARGET_PLATFORM.rpm
 fi
 echo "mongosh version:"
 mongosh --version
@@ -45,8 +45,11 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel93-x86_64-100.10.0.tgz" -o mongodb-database-tools-rhel90-x86_64-100.10.0.tgz
 elif [[ "$TARGET_PLATFORM" == "arm64" ]]; then
   curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel93-aarch64-100.10.0.tgz" -o mongodb-database-tools-rhel90-aarch64-100.10.0.tgz
+elif [[ "$TARGET_PLATFORM" == "ppc64le" ]]; then
+  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel81-ppc64le-100.11.0.tgz" -o mongodb-database-tools-rhel81-$TARGET_PLATFORM-100.10.0.tgz
 else
-  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel83-s390x-100.10.0.tgz" -o mongodb-database-tools-rhel83-s390x-100.10.0.tgz
+  curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-rhel83-s390x-100.10.0.tgz" -o mongodb-database-tools-rhel83-$TARGET_PLATFORM-100.10.0.tgz
+
 fi
 tar xvfz mongodb-database-tools-rhel*.tgz
 mv mongodb-database-tools-rhel*/bin/* /usr/local/bin/
