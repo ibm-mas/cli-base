@@ -24,8 +24,8 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 
 # Install OpenShift CLI (latest stable version)
-# setting oc version to 4.17.8 due to issue: MASCORE-5777, Please validate again before April patch release
-wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/4.17.8/openshift-client-linux.tar.gz
+# setting oc version back to stable if issue found set 4.17.8 due to issue: MASCORE-5777, Please validate again before April patch release
+wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/openshift-client-linux.tar.gz
 tar -zxf openshift-client-linux.tar.gz
 mv oc /usr/local/bin/
 mv kubectl /usr/local/bin/
@@ -35,7 +35,8 @@ echo "oc version:"
 oc version
 
 # Install oc mirror plugin (latest stable version)
-wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/4.17.8/oc-mirror.tar.gz
+# setting oc version back to stable if issue found set 4.17.8
+wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/oc-mirror.tar.gz
 tar -zxf oc-mirror.tar.gz
 mv oc-mirror /usr/local/bin/
 chmod +x /usr/local/bin/oc-mirror
