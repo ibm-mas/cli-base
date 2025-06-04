@@ -7,24 +7,24 @@ do
 
   case $key in
     --target-platform)
-  TARGET_PLATFORM="$2"
-  ;;
-      *)
-      # unknown option, use as additional params directly to docker
-      EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
-      ;;
+    TARGET_PLATFORM="$2"
+    ;;
+    
+    *)
+    # unknown option, use as additional params directly to docker
+    EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
+    ;;
   esac
-  shift
-  shift
+  shift  # Remove key
+  shift  # Remove value
 done
 
-#fallback to amd64 if architecture not defined
+# Fallback to amd64 if architecture not defined
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
 
 # Install OpenShift CLI (latest stable version)
-# setting oc version back to stable if issue found set 4.17.8 due to issue: MASCORE-5777, Please validate again before April patch release
 wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/openshift-client-linux.tar.gz
 tar -zxf openshift-client-linux.tar.gz
 mv oc /usr/local/bin/
@@ -35,7 +35,6 @@ echo "oc version:"
 oc version
 
 # Install oc mirror plugin (latest stable version)
-# setting oc version back to stable if issue found set 4.17.8
 wget -q https://mirror.openshift.com/pub/openshift-v4/$TARGET_PLATFORM/clients/ocp/stable/oc-mirror.tar.gz
 tar -zxf oc-mirror.tar.gz
 mv oc-mirror /usr/local/bin/
