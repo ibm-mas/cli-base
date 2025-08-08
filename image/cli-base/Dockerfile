@@ -7,7 +7,8 @@ ARG ARCHITECTURE
 
 # 1. Upgrade system packages
 USER root
-RUN dnf update -y --skip-broken --nobest &&\
+RUN dnf install epel-release -y &&\
+    dnf update -y --skip-broken --nobest &&\
     dnf upgrade -y --skip-broken --nobest &&\
     dnf install nano jq tree -y &&\
     dnf clean all
