@@ -29,9 +29,11 @@ wget -q https://download.clis.cloud.ibm.com/ibm-cloud-cli/${CLI_VERSION}/IBM_Clo
 tar -xzf IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 mv Bluemix_CLI/bin/ibmcloud /usr/local/bin/
 rm -rf Bluemix_CLI IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
+ibmcloud config --check-version=false
 ibmcloud plugin repo-plugins -r 'IBM Cloud'
 ibmcloud plugin install container-registry
-#Plugin not supported in ppc64le (Could not find compatible binary to install for plug-in container-service[kubernetes-service/ks]
+ibmcloud plugin install secrets-manager
+# Plugin not supported in ppc64le (Could not find compatible binary to install for plug-in container-service[kubernetes-service/ks]
 if [[ "$TARGET_PLATFORM" != "ppc64le" ]]
   then
   ibmcloud plugin install container-service
