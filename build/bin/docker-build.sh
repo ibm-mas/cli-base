@@ -26,6 +26,10 @@ do
         TARGET_PLATFORM="$2"
         ;;
 
+        --scap-data-stream)
+        SCAP_DATA_STREAM="$2"
+        ;;
+
         *)
         # unknown option, use as additional params directly to docker
         EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
@@ -78,3 +82,36 @@ docker buildx build --progress plain \
   --build-arg VCS_REF=$GITHUB_SHA \
   --build-arg VCS_URL=https://github.com/$GITHUB_REPOSITORY \
   -t $LOCAL_TAG $EXTRA_PARAMS -f $DOCKERFILE $BUILDPATH || exit 1
+
+# 5. Generate OSCAP(Security Content Automation Protocol) report
+# ---------------------------------------------------------------------------------------------------------------------
+echo_h2 "Generate OSCAP scan report and remediation script"
+echo_info "Target platform ${TARGET_PLATFORM}"
+echo_info "CONFIG_DIR: ${CONFIG_DIR}"
+if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
+  if [[ "$OSCAP_ENABLED" != "true" ]]; then
+    echo_info "SCAP scan is disabled, set OSCAP_ENABLED=true for SCAP scanning and image hardening during image build ${NAMESPACE}/${IMAGE}:${DOCKER_TAG}"
+  else
+    mkdir -p $OSCAP_DIR
+    echo_info "SCAP Data Stream: ${SCAP_DATA_STREAM}.xml"
+    echo_info "Generating OSCAP scan report"
+    if [[ "$TARGET_PLATFORM" == "" ]]; then
+      sudo $DIR/oscap-docker.sh $REPOSITORY:latest xccdf eval --report $OSCAP_DIR/$REPOSITORY-report.html --results $OSCAP_DIR/$REPOSITORY-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
+    else
+      sudo $DIR/oscap-docker.sh $REPOSITORY:$DOCKER_TAG-$TARGET_PLATFORM xccdf eval --report $OSCAP_DIR/$REPOSITORY-report.html --results $OSCAP_DIR/$REPOSITORY-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
+    fi
+    sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/$REPOSITORY-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/$REPOSITORY-results.xml
+    ls -l $OSCAP_DIR
+    # Upload the results to Artifactory
+    $DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-report.html --h2 --target-platform "${TARGET_PLATFORM}"
+    $DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-results.xml --h2 --target-platform "${TARGET_PLATFORM}"
+    $DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-remediation.sh --h2 --target-platform "${TARGET_PLATFORM}"
+    #if isReleaseBranch || isMaintenanceDevBranch; then
+    #  echo_info "Saving the oscap scan results to Database"
+    #  $DIR/internal/oscap-results.py --namespace $NAMESPACE --image $IMAGE --tag $DOCKER_TAG
+    #fi
+  fi
+else
+  echo_highlight "OSCAP tooling can only process amd64 container images"
+fi
+

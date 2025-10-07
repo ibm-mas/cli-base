@@ -14,7 +14,7 @@ if [[ "$TARGET_PLATFORM" == "s390x" || "$TARGET_PLATFORM" == "ppc64le" ]]; then
     python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography --target-platform $TARGET_PLATFORM
 fi
 # Build the image
-$GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform $TARGET_PLATFORM -b image/cli-base
+$GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform $TARGET_PLATFORM -b image/cli-base --scap-data-stream ssg-rhel9-ds
 
 # Squash the image layers
 python3 -m pip install docker-squash
