@@ -92,6 +92,7 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   if [[ "$OSCAP_ENABLED" != "true" ]]; then
     echo "SCAP scan is disabled, set OSCAP_ENABLED=true for SCAP scanning and image hardening during image build ${NAMESPACE}/${IMAGE}:${DOCKER_TAG}"
   else
+    install_oscap
     mkdir -p $OSCAP_DIR
     echo "SCAP Data Stream: ${SCAP_DATA_STREAM}.xml"
     echo "Generating OSCAP scan report"
