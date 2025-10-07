@@ -113,6 +113,6 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     #fi
   fi
 else
-  echo_highlight "OSCAP tooling can only process amd64 container images"
+  echo "OSCAP tooling can only process amd64 container images"
 fi
 
