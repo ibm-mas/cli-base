@@ -45,16 +45,16 @@ if [ -z $BUILD_SYSTEM_ENV_LOADED ]; then
     echo "GITHUB_ENV is not defined"
   fi
 
-  echo_h1 "Build Properties"
-  echo_highlight "DIR ........................ $DIR"
-  echo_highlight "PATH ....................... $PATH"
-  echo_highlight ""
-  echo_highlight "VERSION_FILE ............... $VERSION_FILE"
-  echo_highlight "VERSION .................... $VERSION"
-  echo_highlight "DOCKER_TAG ................. $DOCKER_TAG"
-  echo_highlight ""
-  echo_highlight "SEMVER_RELEASE_LEVEL_FILE .. $SEMVER_RELEASE_LEVEL_FILE"
-  echo_highlight "SEMVER_RELEASE_LEVEL ....... $SEMVER_RELEASE_LEVEL"
+  echo "Build Properties"
+  echo "DIR ........................ $DIR"
+  echo "PATH ....................... $PATH"
+  echo ""
+  echo "VERSION_FILE ............... $VERSION_FILE"
+  echo "VERSION .................... $VERSION"
+  echo "DOCKER_TAG ................. $DOCKER_TAG"
+  echo ""
+  echo "SEMVER_RELEASE_LEVEL_FILE .. $SEMVER_RELEASE_LEVEL_FILE"
+  echo "SEMVER_RELEASE_LEVEL ....... $SEMVER_RELEASE_LEVEL"
 else
   echo "BUILD_SYSTEM_ENV_LOADED is already defined, skipping debug and export to GitHub env file"
 fi
