@@ -104,9 +104,9 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/$REPOSITORY-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/$REPOSITORY-results.xml
     ls -l $OSCAP_DIR
     # Upload the results to Artifactory
-    $DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-report.html --h2 --target-platform "${TARGET_PLATFORM}"
-    $DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-results.xml --h2 --target-platform "${TARGET_PLATFORM}"
-    $DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-remediation.sh --h2 --target-platform "${TARGET_PLATFORM}"
+    #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-report.html --h2 --target-platform "${TARGET_PLATFORM}"
+    #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-results.xml --h2 --target-platform "${TARGET_PLATFORM}"
+    #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-remediation.sh --h2 --target-platform "${TARGET_PLATFORM}"
     #if isReleaseBranch || isMaintenanceDevBranch; then
     #  echo "Saving the oscap scan results to Database"
     #  $DIR/internal/oscap-results.py --namespace $NAMESPACE --image $IMAGE --tag $DOCKER_TAG
