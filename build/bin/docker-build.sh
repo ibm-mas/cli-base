@@ -86,9 +86,7 @@ docker buildx build --progress plain \
 # 5. Generate OSCAP(Security Content Automation Protocol) report
 # ---------------------------------------------------------------------------------------------------------------------
 echo_h2 "Generate OSCAP scan report and remediation script"
-echo "Target platform ${TARGET_PLATFORM}"
-echo "CONFIG_DIR: ${CONFIG_DIR}"
-if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
+if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
   if [[ "$OSCAP_ENABLED" != "true" ]]; then
     echo "SCAP scan is disabled, set OSCAP_ENABLED=true for SCAP scanning and image hardening during image build ${NAMESPACE}/${IMAGE}:${DOCKER_TAG}"
   else
@@ -106,8 +104,8 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     # Upload the results to Artifactory
     
     artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-report.html
-    #artifactory_upload $OSCAP_DIR/cli-base-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-results.xml
-    #artifactory_upload $OSCAP_DIR/cli-base-remediation.sh $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
+    artifactory_upload $OSCAP_DIR/cli-base-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-results.xml
+    artifactory_upload $OSCAP_DIR/cli-base-remediation.sh $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
     
     #if isReleaseBranch || isMaintenanceDevBranch; then
     #  echo "Saving the oscap scan results to Database"

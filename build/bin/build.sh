@@ -5,6 +5,9 @@ TARGET_PLATFORM=$1
 echo "GITHUB_REF=$GITHUB_REF"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 
+# Copy OSCAP remediation file from artifactory
+wget --header="Authorization:Bearer ${ARTIFACTORY_TOKEN}" ${OSCAP_REMEDIATION_URL} -O ${OSCAP_REMEDIATION_FILE}
+
 # Login to quay.io
 docker login --username $QUAYIO_USERNAME --password $QUAYIO_PASSWORD quay.io
 if [[ "$TARGET_PLATFORM" == "s390x" || "$TARGET_PLATFORM" == "ppc64le" ]]; then

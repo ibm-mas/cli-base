@@ -11,6 +11,9 @@ CONFIG_DIR=$DIR/config
 export OSCAP_ENABLED=${OSCAP_ENABLED:-true}
 export OSCAP_DIR=$DIR/.oscap
 export ARTIFACTORY_GENERIC_RELEASE_URL=${ARTIFACTORY_GENERIC_RELEASE_URL:-https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-release}
+export ARTIFACTORY_GENERIC_LOCAL_URL=${ARTIFACTORY_GENERIC_LOCAL_URL:-https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local}
+export OSCAP_REMEDIATION_URL=${ARTIFACTORY_GENERIC_LOCAL_URL}/dependencies/oscap/ubi9/remediate.sh
+export OSCAP_REMEDIATION_FILE=image/ubi-supervisor/remediate.sh
 
 # Version file (semver)
 export VERSION_FILE=${GITHUB_WORKSPACE}/.version
