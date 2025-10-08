@@ -97,11 +97,11 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     echo "SCAP Data Stream: ${SCAP_DATA_STREAM}.xml"
     echo "Generating OSCAP scan report"
     if [[ "$TARGET_PLATFORM" == "" ]]; then
-      sudo $DIR/oscap-docker.sh $REPOSITORY:latest xccdf eval --report $OSCAP_DIR/$REPOSITORY-report.html --results $OSCAP_DIR/$REPOSITORY-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
+      sudo $DIR/oscap-docker.sh $REPOSITORY:latest xccdf eval --report $OSCAP_DIR/cli-base-report.html --results $OSCAP_DIR/cli-base-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
     else
-      sudo $DIR/oscap-docker.sh $REPOSITORY:$DOCKER_TAG-$TARGET_PLATFORM xccdf eval --report $OSCAP_DIR/$REPOSITORY-report.html --results $OSCAP_DIR/$REPOSITORY-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
+      sudo $DIR/oscap-docker.sh $REPOSITORY:$DOCKER_TAG-$TARGET_PLATFORM xccdf eval --report $OSCAP_DIR/cli-base-report.html --results $OSCAP_DIR/cli-base-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
     fi
-    sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/$REPOSITORY-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/$REPOSITORY-results.xml
+    sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/cli-base-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/cli-base-results.xml
     ls -l $OSCAP_DIR
     # Upload the results to Artifactory
     #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-report.html --h2 --target-platform "${TARGET_PLATFORM}"
