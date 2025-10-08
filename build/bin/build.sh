@@ -5,6 +5,11 @@ TARGET_PLATFORM=$1
 echo "GITHUB_REF=$GITHUB_REF"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 
+export ARTIFACTORY_GENERIC_RELEASE_URL=${ARTIFACTORY_GENERIC_RELEASE_URL:-https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-release}
+export ARTIFACTORY_GENERIC_LOCAL_URL=${ARTIFACTORY_GENERIC_LOCAL_URL:-https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local}
+export OSCAP_REMEDIATION_URL=${ARTIFACTORY_GENERIC_LOCAL_URL}/dependencies/oscap/ubi9/remediate.sh
+export OSCAP_REMEDIATION_FILE=image/ubi-supervisor/remediate.sh
+
 echo "OSCAP_REMEDIATION_URL: $OSCAP_REMEDIATION_URL"
 echo "OSCAP_REMEDIATION_FILE: $OSCAP_REMEDIATION_FILE"
 
