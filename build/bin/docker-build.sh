@@ -105,10 +105,10 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     ls -l $OSCAP_DIR
     # Upload the results to Artifactory
     
-    artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/cli-base/$DOCKER_TAG/cli-base-report.html
-    #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-report.html --h2 --target-platform "${TARGET_PLATFORM}"
-    #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-results.xml --h2 --target-platform "${TARGET_PLATFORM}"
-    #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-remediation.sh --h2 --target-platform "${TARGET_PLATFORM}"
+    artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-report.html
+    #artifactory_upload $OSCAP_DIR/cli-base-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-results.xml
+    #artifactory_upload $OSCAP_DIR/cli-base-remediation.sh $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
+    
     #if isReleaseBranch || isMaintenanceDevBranch; then
     #  echo "Saving the oscap scan results to Database"
     #  $DIR/internal/oscap-results.py --namespace $NAMESPACE --image $IMAGE --tag $DOCKER_TAG
