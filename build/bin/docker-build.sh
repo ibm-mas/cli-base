@@ -104,6 +104,8 @@ if [[ "$TARGET_PLATFORM" == "" ]] || [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/cli-base-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/cli-base-results.xml
     ls -l $OSCAP_DIR
     # Upload the results to Artifactory
+    
+    artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/cli-base/$DOCKER_TAG/cli-base-report.html
     #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-report.html --h2 --target-platform "${TARGET_PLATFORM}"
     #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-results.xml --h2 --target-platform "${TARGET_PLATFORM}"
     #$DIR/artifactoryrelease.sh $OSCAP_DIR/$REPOSITORY-remediation.sh --h2 --target-platform "${TARGET_PLATFORM}"
