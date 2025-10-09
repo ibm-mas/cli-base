@@ -94,7 +94,7 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     mkdir -p $OSCAP_DIR
     echo "SCAP Data Stream: ${SCAP_DATA_STREAM}.xml"
     echo "Generating OSCAP scan report"
-    image_name = "${REPOSITORY##*/}"
+    image_name="${REPOSITORY##*/}"
     if [[ "$TARGET_PLATFORM" == "" ]]; then
       sudo $DIR/oscap-docker.sh $REPOSITORY:latest xccdf eval --report $OSCAP_DIR/$image_name-report.html --results $OSCAP_DIR/$image_name-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
     else
