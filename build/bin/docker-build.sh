@@ -94,24 +94,20 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     mkdir -p $OSCAP_DIR
     echo "SCAP Data Stream: ${SCAP_DATA_STREAM}.xml"
     echo "Generating OSCAP scan report"
+    image_name = "${REPOSITORY##*/}"
     if [[ "$TARGET_PLATFORM" == "" ]]; then
-      sudo $DIR/oscap-docker.sh $REPOSITORY:latest xccdf eval --report $OSCAP_DIR/cli-base-report.html --results $OSCAP_DIR/cli-base-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
+      sudo $DIR/oscap-docker.sh $REPOSITORY:latest xccdf eval --report $OSCAP_DIR/$image_name-report.html --results $OSCAP_DIR/$image_name-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
     else
-      sudo $DIR/oscap-docker.sh $REPOSITORY:$DOCKER_TAG-$TARGET_PLATFORM xccdf eval --report $OSCAP_DIR/cli-base-report.html --results $OSCAP_DIR/cli-base-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
+      sudo $DIR/oscap-docker.sh $REPOSITORY:$DOCKER_TAG-$TARGET_PLATFORM xccdf eval --report $OSCAP_DIR/$image_name-report.html --results $OSCAP_DIR/$image_name-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
     fi
-    sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/cli-base-remediation.txt --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/cli-base-results.xml
-    #chmod a+r $OSCAP_DIR/cli-base-remediation.txt
-    ls -l $OSCAP_DIR
-    # Upload the results to Artifactory
+    sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/$image_name-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/$image_name-results.xml
     
-    artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-report.html
-    artifactory_upload $OSCAP_DIR/cli-base-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-results.xml
-    #artifactory_upload $OSCAP_DIR/cli-base-remediation.txt $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
-    
-    #if isReleaseBranch || isMaintenanceDevBranch; then
-    #  echo "Saving the oscap scan results to Database"
-    #  $DIR/internal/oscap-results.py --namespace $NAMESPACE --image $IMAGE --tag $DOCKER_TAG
-    #fi
+    #ls -l $OSCAP_DIR
+    # Upload the results to Artifactory    
+    artifactory_upload $OSCAP_DIR/$image_name-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/$image_name/$DOCKER_TAG/$image_name-report.html
+    artifactory_upload $OSCAP_DIR/$image_name-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/$image_name/$DOCKER_TAG/$image_name-results.xml
+    # To do: Getting permissions denied while uploading the $image_name-remediation.sh to artifactory since the file has readonly permissions to root user
+    #artifactory_upload $OSCAP_DIR/$image_name-remediation.sh $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/$image_name/$DOCKER_TAG/$image_name-remediation.sh
   fi
 else
   echo "OSCAP tooling can only process amd64 container images"
