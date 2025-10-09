@@ -9,7 +9,7 @@ CONFIG_DIR=$DIR/config
 
 # Use OSCAP tools to produce image hardening report for built images
 export OSCAP_ENABLED=${OSCAP_ENABLED:-true}
-export OSCAP_DIR=$DIR/.oscap
+export OSCAP_DIR=$GITHUB_WORKSPACE/.oscap
 
 
 # Version file (semver)
