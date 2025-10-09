@@ -100,13 +100,13 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
       sudo $DIR/oscap-docker.sh $REPOSITORY:$DOCKER_TAG-$TARGET_PLATFORM xccdf eval --report $OSCAP_DIR/cli-base-report.html --results $OSCAP_DIR/cli-base-results.xml --profile stig $CONFIG_DIR/oscap/${SCAP_DATA_STREAM}.xml
     fi
     sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/cli-base-remediation.txt --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/cli-base-results.xml
-    chmod a+r $OSCAP_DIR/cli-base-remediation.txt
+    #chmod a+r $OSCAP_DIR/cli-base-remediation.txt
     ls -l $OSCAP_DIR
     # Upload the results to Artifactory
     
     artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-report.html
     artifactory_upload $OSCAP_DIR/cli-base-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-results.xml
-    artifactory_upload $OSCAP_DIR/cli-base-remediation.txt $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
+    #artifactory_upload $OSCAP_DIR/cli-base-remediation.txt $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
     
     #if isReleaseBranch || isMaintenanceDevBranch; then
     #  echo "Saving the oscap scan results to Database"
