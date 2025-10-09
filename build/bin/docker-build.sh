@@ -106,7 +106,7 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     
     artifactory_upload $OSCAP_DIR/cli-base-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-report.html
     artifactory_upload $OSCAP_DIR/cli-base-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-results.xml
-    artifactory_upload $OSCAP_DIR/cli-base-remediation.sh $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
+    artifactory_upload $OSCAP_DIR/cli-base-remediation.txt $ARTIFACTORY_GENERIC_RELEASE_URL/maximoappsuite/cli-base/$DOCKER_TAG/cli-base-remediation.sh
     
     #if isReleaseBranch || isMaintenanceDevBranch; then
     #  echo "Saving the oscap scan results to Database"
