@@ -105,5 +105,5 @@ function artifactory_upload() {
 # install oscap tools
 function install_oscap() {
   sudo apt-get update
-  sudo apt-get install -y openscap-scanner libopenscap25
+  sudo apt-get install -y openscap-scanner
 }
