@@ -43,6 +43,13 @@ RUN rm -rf /tmp/install && \
 ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-$ARCHITECTURE /tini
 RUN chmod +x /tini
 
+# 5. Run remediation
+COPY remediate.sh /tmp
+RUN chmod a+x /tmp/remediate.sh
+RUN bash /tmp/remediate.sh
+
+# 6. Cleanup
+RUN rm -rf /tmp/*
 # 11. Setup working environment
 WORKDIR /mascli
 ENTRYPOINT ["/tini", "--"]
