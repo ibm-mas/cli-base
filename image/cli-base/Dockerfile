@@ -48,6 +48,7 @@ COPY remediate.sh /tmp
 RUN chmod a+x /tmp/remediate.sh
 RUN bash /tmp/remediate.sh
 
+
 # 6. Cleanup
 RUN rm -rf /tmp/*
 # 11. Setup working environment
