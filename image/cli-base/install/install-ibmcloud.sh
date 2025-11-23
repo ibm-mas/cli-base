@@ -23,7 +23,7 @@ if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
 
-CLI_VERSION=2.30.0
+CLI_VERSION=2.38.1
 wget -q https://download.clis.cloud.ibm.com/ibm-cloud-cli/${CLI_VERSION}/IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 tar -xzf IBM_Cloud_CLI_${CLI_VERSION}_${TARGET_PLATFORM}.tar.gz
 mv Bluemix_CLI/bin/ibmcloud /usr/local/bin/

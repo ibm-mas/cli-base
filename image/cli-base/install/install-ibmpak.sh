@@ -24,7 +24,7 @@ if [[ "$TARGET_PLATFORM" == "" ]]
 fi
 
 if [[ "$TARGET_PLATFORM" != "arm64" ]]; then
-  curl -L https://github.com/IBM/ibm-pak-plugin/releases/download/v1.16.2/oc-ibm_pak-linux-$TARGET_PLATFORM.tar.gz -o oc-ibm_pak-linux-$TARGET_PLATFORM.tar.gz
+  curl -L https://github.com/IBM/ibm-pak-plugin/releases/download/v1.20.0/oc-ibm_pak-linux-$TARGET_PLATFORM.tar.gz -o oc-ibm_pak-linux-$TARGET_PLATFORM.tar.gz
   tar -xf oc-ibm_pak-linux-$TARGET_PLATFORM.tar.gz
   mv oc-ibm_pak-linux-$TARGET_PLATFORM /usr/local/bin/oc-ibm_pak
   rm oc-ibm_pak-linux-$TARGET_PLATFORM.tar.gz
