@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-314
+FROM registry.access.redhat.com/ubi9/python-312
 ARG VERSION_LABEL
 ARG ARCHITECTURE
 # ----- Start as "default" user ----------------------------------------------
