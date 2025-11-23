@@ -8,6 +8,7 @@ jmespath==1.0.1
 click==8.3.1
 prettytable==3.17.0
 jinja-cli==1.2.2
+jinjanator==25.3.0
 slack-sdk==3.39.0
 jira==3.10.5
 boto3==1.41.2

@@ -23,3 +23,5 @@ Provides:
 | `rosa`                |  ✔️  |  ❌ ️  |  ✔️  |
 | `boto3`               |  ✔️  |  ✔️   |  ✔️  |
 | `argocd`              |  ✔️  |  ✔️   |  ✔️  |
+
+Note: IBM Cloud `Container-Registry` plugin is supported on ppc64le, however the `Container-Service` plugin is not.

@@ -17,12 +17,12 @@ do
     shift
     shift
 done
-#fallback to amd64 if architecture not defined
+
+# Fallback to amd64 if architecture not defined
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
 curl -L  "https://github.com/mikefarah/yq/releases/download/v4.49.1/yq_linux_${TARGET_PLATFORM}"  > /usr/bin/yq
-# yq_linux_s390x
 chmod 755 /usr/bin/yq
 
 echo "yq version:"

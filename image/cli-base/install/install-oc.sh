@@ -7,18 +7,19 @@ do
 
   case $key in
     --target-platform)
-  TARGET_PLATFORM="$2"
-  ;;
-      *)
-      # unknown option, use as additional params directly to docker
-      EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
-      ;;
+    TARGET_PLATFORM="$2"
+    ;;
+    
+    *)
+    # unknown option, use as additional params directly to docker
+    EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
+    ;;
   esac
-  shift
-  shift
+  shift  # Remove key
+  shift  # Remove value
 done
 
-#fallback to amd64 if architecture not defined
+# Fallback to amd64 if architecture not defined
 if [[ "$TARGET_PLATFORM" == "" ]]
   then TARGET_PLATFORM=amd64
 fi
@@ -39,8 +40,4 @@ tar -zxf oc-mirror.tar.gz
 mv oc-mirror /usr/local/bin/
 chmod +x /usr/local/bin/oc-mirror
 rm -f oc-mirror.tar.gz
-
-echo "oc-mirror version:"
-oc-mirror version --output json
-
 rm -f /opt/app-root/src/.oc-mirror.log

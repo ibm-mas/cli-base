@@ -5,6 +5,11 @@ on:
     tags-ignore: [ "**" ]
   release:
     types: [ published ]
+env:
+  ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  QUAYIO_USERNAME:   ${{ secrets.QUAYIO_USERNAME }}
+  QUAYIO_PASSWORD:   ${{ secrets.QUAYIO_PASSWORD }}
+  W3_USERNAME:       ${{ secrets.W3_USERNAME }}
 
 jobs:
   build-amd64:
@@ -27,23 +32,7 @@ jobs:
       - name: Build the docker image (amd64)
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
-          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
-
-          # Login to quay.io
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-
-          # Build the image
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform amd64 -b image/cli-base
-
-          # Squash the image layers
-          python3 -m pip install docker-squash
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64 quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
-
-          # List available images
-          docker images
-
-          # Push the images
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-amd64
+          source $GITHUB_WORKSPACE/build/bin/build.sh amd64
 
   build-s390x:
     name: Build Image (s390x)
@@ -63,31 +52,31 @@ jobs:
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
       - name: Build the docker image (s390x)
-        env:
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: |
           echo "GITHUB_REF=$GITHUB_REF"
-          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+           source $GITHUB_WORKSPACE/build/bin/build.sh s390x
 
-          # Login to quay.io
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
+  build-ppc64le:
+    name: Build Image (ppc64le)
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Without this option, we don't get the tag information
+        with:
+          fetch-depth: 0
 
-          # Before we build the s390x image we need to download some pre-build dependencies from Artifactory
-          wget --header="Authorization:Bearer $ARTIFACTORY_TOKEN" https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/rclone/rclone.tar.gz -O $GITHUB_WORKSPACE/image/cli-base/install/rclone.tar.gz
-          python3 $GITHUB_WORKSPACE/build/bin/python-collect-prebuilt-wheels.py --req-file $GITHUB_WORKSPACE/image/cli-base/install/requirements.txt --dest $GITHUB_WORKSPACE/image/cli-base/install/ --add-dependency cryptography
+      - name: Initialise the build system
+        run: |
+          chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
+          $GITHUB_WORKSPACE/build/bin/initbuild.sh
+          source $GITHUB_WORKSPACE/build/bin/.functions.sh
 
-          # Build the images
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform s390x -b image/cli-base
-
-          # Squash the image layers
-          python3 -m pip install docker-squash
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
-
-          # List available images
-          docker images
-
-          # Push the images
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-s390x
+      - name: Build the docker image (ppc64le)
+        run: |
+          echo "GITHUB_REF=$GITHUB_REF"
+          source $GITHUB_WORKSPACE/build/bin/build.sh ppc64le
 
   build-arm64:
     name: Build Image (arm64)
@@ -108,24 +97,7 @@ jobs:
 
       - name: Build the docker image (arm64)
         run: |
-          echo "GITHUB_REF=$GITHUB_REF"
-          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
-
-          # Login to quay.io
-          docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
-
-          # Build the image
-          $GITHUB_WORKSPACE/build/bin/docker-build.sh -r quay.io/ibmmas/cli-base --target-platform arm64 -b image/cli-base
-
-          # # Squash the image layers
-          python3 -m pip install docker-squash
-          docker-squash --load-image --tag quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64 quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
-
-          # List available images
-          docker images
-
-          # Push the images
-          docker push quay.io/ibmmas/cli-base:${{ env.DOCKER_TAG }}-arm64
+          source $GITHUB_WORKSPACE/build/bin/build.sh arm64
 
   build-manifest:
     name: Build Manifest
@@ -134,6 +106,7 @@ jobs:
       - build-amd64
       - build-s390x
       - build-arm64
+      - build-ppc64le
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -157,7 +130,7 @@ jobs:
           docker login --username "${{ secrets.QUAYIO_USERNAME }}" --password "${{ secrets.QUAYIO_PASSWORD }}" quay.io
 
           # Publish the manifest
-          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64
+          $GITHUB_WORKSPACE/build/bin/docker-manifest.sh -r quay.io/ibmmas/cli-base --target-platforms amd64,s390x,arm64,ppc64le
 
           # Re-issue the manifest under an alias where needed
           # https://github.com/docker/buildx/issues/1744#issuecomment-1896645786
