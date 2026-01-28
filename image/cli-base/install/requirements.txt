@@ -2,7 +2,7 @@ junit_xml==1.9
 pymongo==4.15.4
 xmljson==0.2.1
 ansible==13.0.0
-kubernetes==34.1.0
+kubernetes==35.0.0
 openshift==0.13.2
 jmespath==1.0.1
 click==8.3.1
@@ -12,3 +12,5 @@ jinjanator==25.3.0
 slack-sdk==3.39.0
 jira==3.10.5
 boto3==1.41.2
+pyasn1==0.6.2
+urllib3==2.6.3
