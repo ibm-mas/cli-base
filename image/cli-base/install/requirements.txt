@@ -1,5 +1,5 @@
 junit_xml==1.9
-pymongo==4.15.4
+pymongo==4.15.5
 xmljson==0.2.1
 ansible==13.0.0
 kubernetes==34.1.0
