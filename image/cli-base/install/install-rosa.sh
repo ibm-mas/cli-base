@@ -25,7 +25,7 @@ if [[ "$TARGET_PLATFORM" == "s390x" ]]; then
   exit 0
 fi
 
-wget -q https://mirror.openshift.com/pub/openshift-v4/clients/rosa/latest/rosa-linux.tar.gz
+wget -q https://mirror.openshift.com/pub/cgw/rosa/latest/rosa-linux.tar.gz
 tar -xzf rosa-linux.tar.gz
 mv rosa /usr/local/bin/
 chmod +x /usr/local/bin/rosa
