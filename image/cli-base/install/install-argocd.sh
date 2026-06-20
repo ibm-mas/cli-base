@@ -28,3 +28,6 @@ curl -sSL -o argocd-linux-${TARGET_PLATFORM} https://github.com/argoproj/argo-cd
 
 echo "ArgoCD version:"
 argocd version --client
+
+# Enable autocompletion for helm
+argocd completion bash > /etc/bash_completion.d/argocd_completion
