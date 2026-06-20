@@ -9,7 +9,7 @@ ARG ARCHITECTURE
 USER root
 RUN dnf update -y --skip-broken --nobest &&\
     dnf upgrade -y --skip-broken --nobest &&\
-    dnf install nano jq libxcrypt-compat cpio -y &&\
+    dnf install nano jq libxcrypt-compat cpio bash-completion -y &&\
     dnf clean all
 
 # 2. Upgrade pip, install wheel, then install Python modules
@@ -51,7 +51,8 @@ RUN bash /tmp/remediate.sh
 
 # 6. Cleanup
 RUN rm -rf /tmp/*
-# 11. Setup working environment
+
+# 7. Setup working environment
 WORKDIR /mascli
 ENTRYPOINT ["/tini", "--"]
 CMD bash

@@ -9,7 +9,7 @@ do
     --target-platform)
     TARGET_PLATFORM="$2"
     ;;
-    
+
     *)
     # unknown option, use as additional params directly to docker
     EXTRA_PARAMS="$EXTRA_PARAMS $key $2"
@@ -41,3 +41,7 @@ mv oc-mirror /usr/local/bin/
 chmod +x /usr/local/bin/oc-mirror
 rm -f oc-mirror.tar.gz
 rm -f /opt/app-root/src/.oc-mirror.log
+
+# Enable bash completion for oc and kubectl
+oc completion bash > /etc/bash_completion.d/oc_completion
+kubectl completion bash > /etc/bash_completion.d/kubectl_completion

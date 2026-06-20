@@ -39,3 +39,6 @@ else
 fi
 echo "Helm version:"
 helm version
+
+# Enable autocompletion for helm
+helm completion bash > /etc/bash_completion.d/helm_completion
