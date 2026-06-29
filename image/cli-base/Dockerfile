@@ -36,7 +36,7 @@ RUN umask 0002 && \
     bash -x /tmp/install/install-aws.sh --target-platform $ARCHITECTURE && \
     bash -x /tmp/install/install-rosa.sh --target-platform $ARCHITECTURE && \
     bash -x /tmp/install/install-redis-cli.sh && \
-    bash -x /tmp/install/install-db2u-migrate.sh
+    bash -x /tmp/install/install-db2u-migrate.sh --target-platform $ARCHITECTURE
 
 RUN rm -rf /tmp/install && \
     rm -f /opt/app-root/src/.wget-hsts /opt/app-root/src/README.md /opt/app-root/src/LICENSE
