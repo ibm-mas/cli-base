@@ -27,6 +27,7 @@ Provides:
 | `ibm_db v3.2.3`       |  ✔️  |  ✔️   |  ✔️    |  ❌  |
 | `libxcrypt-compat`    |  ✔️  |  ✔️   |  ✔️    |  ✔️  |
 | `cpio`                |  ✔️  |  ✔️   |  ✔️    |  ✔️  |
+| `db2u_migrate`.       |  ✔️  |  ✔️   |  ✔️    |  ✔️  |
 
 **Notes:**
 - IBM Cloud `Container-Registry` plugin is supported on ppc64le, however the `Container-Service` plugin is not.
