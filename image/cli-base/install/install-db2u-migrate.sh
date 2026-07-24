@@ -26,5 +26,8 @@ fi
 mv /tmp/install/bin/db2u_migrate-$TARGET_PLATFORM /usr/local/bin/db2u_migrate
 chmod +x /usr/local/bin/db2u_migrate
 
+echo "uname -m"
+uname -m
+
 echo "db2u_migrate --help"
 db2u_migrate --help
