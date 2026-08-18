@@ -32,4 +32,3 @@ Provides:
 **Notes:**
 - IBM Cloud `Container-Registry` plugin is supported on ppc64le, however the `Container-Service` plugin is not.
 - `ibm_db` (DB2 Python driver) is not supported on arm64 architecture due to upstream limitations.
-
