@@ -6,16 +6,52 @@ on:
   release:
     types: [ published ]
 env:
-  ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-  QUAYIO_USERNAME:   ${{ secrets.QUAYIO_USERNAME }}
-  QUAYIO_PASSWORD:   ${{ secrets.QUAYIO_PASSWORD }}
-  W3_USERNAME:       ${{ secrets.W3_USERNAME }}
+  IBM_CLOUD_APIKEY:       ${{ secrets.IBM_CLOUD_APIKEY }}
+  QUAYIO_USERNAME:        ${{ secrets.QUAYIO_USERNAME }}
+  QUAYIO_PASSWORD:        ${{ secrets.QUAYIO_PASSWORD }}
+  W3_USERNAME:            ${{ secrets.W3_USERNAME }}
+  ARTIFACTORY_SECRET_ID:  ${{ secrets.ARTIFACTORY_SECRET_ID }}
+  SECRET_MANAGER_URL:     ${{ secrets.SECRET_MANAGER_URL }}
 
 jobs:
+  fetch-token:
+    name: Fetch Artifactory Token
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    outputs:
+      artifactory_token: ${{ steps.fetch.outputs.artifactory_token }}
+    steps:
+      - name: Fetch Artifactory token from IBM Cloud Secrets Manager
+        id: fetch
+        run: |
+          set -euo pipefail
+          IAM_RESPONSE=$(curl -sf -X POST "https://iam.cloud.ibm.com/identity/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=$IBM_CLOUD_APIKEY")
+          IAM_TOKEN=$(echo "$IAM_RESPONSE" | jq -r '.access_token')
+          if [[ -z "$IAM_TOKEN" || "$IAM_TOKEN" == "null" ]]; then
+            echo "ERROR: Failed to obtain IAM token" >&2
+            exit 1
+          fi
+          SECRET_RESPONSE=$(curl -sf -X GET "${SECRET_MANAGER_URL}/api/v2/secrets/${ARTIFACTORY_SECRET_ID}" \
+            -H "Authorization: Bearer $IAM_TOKEN" \
+            -H "Accept: application/json")
+          TOKEN=$(echo "$SECRET_RESPONSE" | jq -r '.payload')
+          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
+            echo "ERROR: Failed to retrieve Artifactory token from Secrets Manager" >&2
+            exit 1
+          fi
+          echo "::add-mask::$IAM_TOKEN"
+          echo "::add-mask::$TOKEN"
+          echo "artifactory_token=$TOKEN" >> $GITHUB_OUTPUT
+
   build-amd64:
     name: Build Image (amd64)
     runs-on: ubuntu-latest
+    needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    env:
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,7 +73,10 @@ jobs:
   build-s390x:
     name: Build Image (s390x)
     runs-on: ubuntu-latest
+    needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    env:
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,7 +98,10 @@ jobs:
   build-ppc64le:
     name: Build Image (ppc64le)
     runs-on: ubuntu-latest
+    needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    env:
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -81,7 +123,10 @@ jobs:
   build-arm64:
     name: Build Image (arm64)
     runs-on: ubuntu-latest
+    needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    env:
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -103,11 +148,14 @@ jobs:
     name: Build Manifest
     runs-on: ubuntu-latest
     needs:
+      - fetch-token
       - build-amd64
       - build-s390x
       - build-arm64
       - build-ppc64le
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
+    env:
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
