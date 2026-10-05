@@ -36,14 +36,14 @@ jobs:
           SECRET_RESPONSE=$(curl -sf -X GET "${SECRET_MANAGER_URL}/api/v2/secrets/${ARTIFACTORY_SECRET_ID}" \
             -H "Authorization: Bearer $IAM_TOKEN" \
             -H "Accept: application/json")
-          TOKEN=$(echo "$SECRET_RESPONSE" | jq -r '.payload')
-          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
+          ARTIFACTORY_SECRET=$(echo "$SECRET_RESPONSE" | jq -r '.payload')
+          if [[ -z "$ARTIFACTORY_SECRET" || "$ARTIFACTORY_SECRET" == "null" ]]; then
             echo "ERROR: Failed to retrieve Artifactory token from Secrets Manager" >&2
             exit 1
           fi
-          echo "artifactory_token_sm_sm=$TOKEN" >> $GITHUB_OUTPUT
+          echo "artifactory_token_sm_sm=$ARTIFACTORY_SECRET" >> $GITHUB_OUTPUT
           echo "::add-mask::$IAM_TOKEN"
-          echo "::add-mask::$TOKEN"
+          echo "::add-mask::$ARTIFACTORY_SECRET"
 
   build-amd64:
     name: Build Image (amd64)
