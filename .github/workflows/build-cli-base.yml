@@ -45,6 +45,7 @@ jobs:
           echo "::add-mask::$IAM_TOKEN"
           echo "::add-mask::$ARTIFACTORY_SECRET"
           echo "artifactory_secret=$ARTIFACTORY_SECRET" >> "$GITHUB_OUTPUT"
+          echo "::add-mask::test"
           echo "test=test" >> $GITHUB_OUTPUT
 
   build-amd64:
