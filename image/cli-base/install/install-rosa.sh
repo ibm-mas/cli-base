@@ -1,4 +1,8 @@
 #!/bin/bash
+# ROSA CLI Version - the latest is showing empty therefore it will be used
+# numbered version
+ROSA_CLI_VERSION="1.2.65"
+
 # Install ROSA Cli
 set -e
 while [[ $# -gt 0 ]]
@@ -25,7 +29,7 @@ if [[ "$TARGET_PLATFORM" == "s390x" ]]; then
   exit 0
 fi
 
-wget -q https://mirror.openshift.com/pub/cgw/rosa/latest/rosa-linux.tar.gz
+wget -q https://mirror.openshift.com/pub/cgw/rosa/$ROSA_CLI_VERSION/rosa-linux.tar.gz
 tar -xzf rosa-linux.tar.gz
 mv rosa /usr/local/bin/
 chmod +x /usr/local/bin/rosa
