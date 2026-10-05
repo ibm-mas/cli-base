@@ -42,11 +42,11 @@ jobs:
             echo "ERROR: Failed to retrieve Artifactory token from Secrets Manager" >&2
             exit 1
           fi
+          echo "artifactory_secret=$ARTIFACTORY_SECRET" >> "$GITHUB_OUTPUT"
+          echo "test=test" >> $GITHUB_OUTPUT
           echo "::add-mask::$IAM_TOKEN"
           echo "::add-mask::$ARTIFACTORY_SECRET"
-          echo "artifactory_secret=$ARTIFACTORY_SECRET" >> "$GITHUB_OUTPUT"
           echo "::add-mask::test"
-          echo "test=test" >> $GITHUB_OUTPUT
 
   build-amd64:
     name: Build Image (amd64)
