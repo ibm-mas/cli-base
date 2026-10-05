@@ -20,6 +20,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     outputs:
       artifactory_secret: ${{ steps.fetch.outputs.artifactory_secret }}
+      test: ${{ steps.fetch.outputs.test }}
     steps:
       - name: Fetch Artifactory token from IBM Cloud Secrets Manager
         id: fetch
@@ -44,6 +45,7 @@ jobs:
           echo "::add-mask::$IAM_TOKEN"
           echo "::add-mask::$ARTIFACTORY_SECRET"
           echo "artifactory_secret=$ARTIFACTORY_SECRET" >> "$GITHUB_OUTPUT"
+          echo "test=test" >> $GITHUB_OUTPUT
 
   build-amd64:
     name: Build Image (amd64)
@@ -52,6 +54,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     env:
       ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_secret }}
+      TEST: ${{ needs.fetch-token.outputs.test }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -61,6 +64,7 @@ jobs:
 
       - name: Initialise the build system
         run: |
+          echo $TEST
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
           $GITHUB_WORKSPACE/build/bin/initbuild.sh
           source $GITHUB_WORKSPACE/build/bin/.functions.sh
