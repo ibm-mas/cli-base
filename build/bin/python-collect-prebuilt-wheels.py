@@ -51,7 +51,7 @@ if target_platform != None:
 else:
     ARTIFACTORY_URL = f"https://na.artifactory.swg-devops.com/artifactory/wiotp-generic-local/dependencies/wheels/s390x"
 
-W3_USERNAME, ARTIFACTORY_TOKEN_SM = os.environ["W3_USERNAME"], os.environ["ARTIFACTORY_TOKEN_SM"]
+W3_USERNAME, ARTIFACTORY_TOKEN = os.environ["W3_USERNAME"], os.environ["ARTIFACTORY_TOKEN"]
 
 # required_packages: Dictionary that contains packages and their version that we will fetch from requirements_report.json.
 required_packages = {}
@@ -122,7 +122,7 @@ def downloadWheelFromArtifactory(wheel_name: str, artifactory_wheels: list) -> N
     for artifactory_wheel in artifactory_wheels:
         if regex.search(artifactory_wheel):
             print(f"Downloading {artifactory_wheel} from artifactory...")
-            command = f'wget --header="Authorization:Bearer {ARTIFACTORY_TOKEN_SM}" "{ARTIFACTORY_URL}/{artifactory_wheel}" -P {destination}'
+            command = f'wget --header="Authorization:Bearer {ARTIFACTORY_TOKEN}" "{ARTIFACTORY_URL}/{artifactory_wheel}" -P {destination}'
             os.system(command)
             print(f"Finished downloading {artifactory_wheel} from Artifactory.\n")
 
@@ -131,7 +131,7 @@ def downloadWheelFromArtifactory(wheel_name: str, artifactory_wheels: list) -> N
 # ************************************************************************************************************#
 
 # Generate a requirements_report.json file for the given requirements.txt file
-extra_index_url = f"--extra-index-url https://{W3_USERNAME}:{ARTIFACTORY_TOKEN_SM}@na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
+extra_index_url = f"--extra-index-url https://{W3_USERNAME}:{ARTIFACTORY_TOKEN}@na.artifactory.swg-devops.com/artifactory/api/pypi/wiotp-pypi-local/simple"
 base_command = f"python3 -m pip install  --ignore-installed --dry-run -r {requirementPath} --report requirements_report.json {extra_index_url}"
 if python_version == None:
     command = base_command
@@ -156,7 +156,7 @@ else:
     exit(1)
 
 # Fetch the html content of all the wheel packages available in the artifactory location
-command = f'wget -q --header="Authorization:Bearer {ARTIFACTORY_TOKEN_SM}" "{ARTIFACTORY_URL}" -O artifactory_list.txt'
+command = f'wget -q --header="Authorization:Bearer {ARTIFACTORY_TOKEN}" "{ARTIFACTORY_URL}" -O artifactory_list.txt'
 os.system(command)
 
 # If we are able to fetch the HTML contents, parse its contents to generate the list of all wheels available in artifactory

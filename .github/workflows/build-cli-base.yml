@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     outputs:
-      artifactory_token_sm: ${{ steps.fetch.outputs.artifactory_token_sm }}
+      artifactory_secret: ${{ steps.fetch.outputs.artifactory_secret }}
     steps:
       - name: Fetch Artifactory token from IBM Cloud Secrets Manager
         id: fetch
@@ -41,9 +41,9 @@ jobs:
             echo "ERROR: Failed to retrieve Artifactory token from Secrets Manager" >&2
             exit 1
           fi
-          echo "artifactory_token_sm_sm=$ARTIFACTORY_SECRET" >> $GITHUB_OUTPUT
           echo "::add-mask::$IAM_TOKEN"
           echo "::add-mask::$ARTIFACTORY_SECRET"
+          echo "artifactory_secret=$ARTIFACTORY_SECRET" >> "$GITHUB_OUTPUT"
 
   build-amd64:
     name: Build Image (amd64)
@@ -51,7 +51,7 @@ jobs:
     needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     env:
-      ARTIFACTORY_TOKEN_SM: ${{ needs.fetch-token.outputs.artifactory_token_sm_sm }}
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_secret }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -76,7 +76,7 @@ jobs:
     needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     env:
-      ARTIFACTORY_TOKEN_SM: ${{ needs.fetch-token.outputs.artifactory_token_sm }}
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_secret }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -101,7 +101,7 @@ jobs:
     needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     env:
-      ARTIFACTORY_TOKEN_SM: ${{ needs.fetch-token.outputs.artifactory_token_sm }}
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_secret }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -126,7 +126,7 @@ jobs:
     needs: fetch-token
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     env:
-      ARTIFACTORY_TOKEN_SM: ${{ needs.fetch-token.outputs.artifactory_token_sm }}
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_secret }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -155,7 +155,7 @@ jobs:
       - build-ppc64le
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     env:
-      ARTIFACTORY_TOKEN_SM: ${{ needs.fetch-token.outputs.artifactory_token_sm }}
+      ARTIFACTORY_TOKEN: ${{ needs.fetch-token.outputs.artifactory_secret }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
