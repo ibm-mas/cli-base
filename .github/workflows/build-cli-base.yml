@@ -6,10 +6,12 @@ on:
   release:
     types: [ published ]
 env:
-  ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-  QUAYIO_USERNAME:   ${{ secrets.QUAYIO_USERNAME }}
-  QUAYIO_PASSWORD:   ${{ secrets.QUAYIO_PASSWORD }}
-  W3_USERNAME:       ${{ secrets.W3_USERNAME }}
+  IBM_CLOUD_APIKEY:       ${{ secrets.IBM_CLOUD_APIKEY }}
+  QUAYIO_USERNAME:        ${{ secrets.QUAYIO_USERNAME }}
+  QUAYIO_PASSWORD:        ${{ secrets.QUAYIO_PASSWORD }}
+  W3_USERNAME:            ${{ secrets.W3_USERNAME }}
+  ARTIFACTORY_SECRET_ID:  ${{ secrets.ARTIFACTORY_SECRET_ID }}
+  SECRET_MANAGER_URL:     ${{ secrets.SECRET_MANAGER_URL }}
 
 jobs:
   build-amd64:
@@ -22,6 +24,9 @@ jobs:
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
+
+      - name: Fetch Artifactory token from IBM Cloud Secrets Manager
+        uses: ./.github/actions/fetch-artifactory-token
 
       - name: Initialise the build system
         run: |
@@ -45,6 +50,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch Artifactory token from IBM Cloud Secrets Manager
+        uses: ./.github/actions/fetch-artifactory-token
+
       - name: Initialise the build system
         run: |
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
@@ -67,6 +75,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch Artifactory token from IBM Cloud Secrets Manager
+        uses: ./.github/actions/fetch-artifactory-token
+
       - name: Initialise the build system
         run: |
           chmod u+x $GITHUB_WORKSPACE/build/bin/*.sh
@@ -88,6 +99,9 @@ jobs:
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
+
+      - name: Fetch Artifactory token from IBM Cloud Secrets Manager
+        uses: ./.github/actions/fetch-artifactory-token
 
       - name: Initialise the build system
         run: |
@@ -114,6 +128,9 @@ jobs:
         # Without this option, we don't get the tag information
         with:
           fetch-depth: 0
+
+      - name: Fetch Artifactory token from IBM Cloud Secrets Manager
+        uses: ./.github/actions/fetch-artifactory-token
 
       - name: Initialise the build system
         run: |
