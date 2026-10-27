@@ -5,7 +5,7 @@ ansible==13.0.0
 kubernetes==35.0.0
 openshift==0.13.2
 jmespath==1.1.0
-click==8.3.1
+click==8.3.3
 prettytable==3.17.0
 jinja-cli==1.2.2
 jinjanator==25.3.1
