@@ -47,4 +47,4 @@ echo "AWS version:"
 aws --version
 
 # Set up bash completion for aws
-ln -s /usr/local/bin/aws_completer /etc/bash_completion.d/aws_completion
+echo "complete -C '/usr/local/bin/aws_completer' aws" > /etc/bash_completion.d/aws_completion
