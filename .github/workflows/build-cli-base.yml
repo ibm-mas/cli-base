@@ -16,7 +16,7 @@ env:
 jobs:
   build-amd64:
     name: Build Image (amd64)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -41,7 +41,7 @@ jobs:
 
   build-s390x:
     name: Build Image (s390x)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -66,7 +66,7 @@ jobs:
 
   build-ppc64le:
     name: Build Image (ppc64le)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -91,7 +91,7 @@ jobs:
 
   build-arm64:
     name: Build Image (arm64)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !contains(github.event.head_commit.message, '[doc]') }}
     steps:
       - name: Checkout
@@ -115,7 +115,7 @@ jobs:
 
   build-manifest:
     name: Build Manifest
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build-amd64
       - build-s390x
