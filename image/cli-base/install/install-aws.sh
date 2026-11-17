@@ -46,5 +46,8 @@ rm  awscliv2.zip
 echo "AWS version:"
 aws --version
 
-# Set up bash completion for aws
-ln -s /usr/local/bin/aws_completer /etc/bash_completion.d/aws_completion
+# Set up bash completion for aws. The AWS CLI v2 has no 'completion bash'
+# generator, instead it provides the aws_completer binary to be registered
+# via complete -C. Files in /etc/bash_completion.d are sourced as shell
+# scripts, so the binary itself must not be placed (or symlinked) there.
+echo "complete -C '/usr/local/bin/aws_completer' aws" > /etc/bash_completion.d/aws_completion
