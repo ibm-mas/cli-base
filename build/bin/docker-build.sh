@@ -102,9 +102,7 @@ if [[ "$TARGET_PLATFORM" == "amd64" ]]; then
     fi
     sudo oscap xccdf generate fix --fix-type bash --output $OSCAP_DIR/$image_name-remediation.sh --result-id xccdf_org.open-scap_testresult_xccdf_org.ssgproject.content_profile_stig $OSCAP_DIR/$image_name-results.xml
     
-    # Upload the results to Artifactory    
-    artifactory_upload $OSCAP_DIR/$image_name-report.html $ARTIFACTORY_GENERIC_RELEASE_URL/github/ibm-mas/$image_name/$DOCKER_TAG/$image_name-report.html
-    artifactory_upload $OSCAP_DIR/$image_name-results.xml $ARTIFACTORY_GENERIC_RELEASE_URL/github/ibm-mas/$image_name/$DOCKER_TAG/$image_name-results.xml
+    # The reports in $OSCAP_DIR are uploaded as GitHub Actions artifacts by the workflow
   fi
 else
   echo "OSCAP tooling can only process amd64 container images"
